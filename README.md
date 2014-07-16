@@ -162,7 +162,8 @@ var linearAlgebra = require('linear-algebra')({
 
 /*
 From now on all floating point addition within the library will be 
-performed using the `add()` method passed in.
+performed using the `add()` method passed in. Note that this will usually 
+incur a massive performance penalty compared to native addition.
 */
 
 var Vector = linearAlgebra.Vector,

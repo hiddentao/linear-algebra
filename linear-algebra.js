@@ -47,10 +47,6 @@
 
     // default adder
     var add = options.add || function(floats) {
-      if (2 === floats.length) {
-        return floats[0] + floats[1];
-      }
-
       var ret = floats[0];
 
       for (var i=1; i<floats.length; ++i) {
@@ -58,6 +54,11 @@
       }
 
       return ret;
+    };
+
+    // optimization - add 2 numbers
+    var add2 = options.add || function(floats) {
+      return floats[0] + floats[1];
     };
 
 
@@ -173,7 +174,7 @@
       var a = new Array(this._dim);
 
       for (var i=0; i<this._dim; ++i) {
-        a[i] = add([ this._data[i], -vector._data[i] ]);
+        a[i] = add2([ this._data[i], -vector._data[i] ]);
       }
 
       return new Vector(a);
@@ -192,7 +193,7 @@
       }
 
       for (var i=0; i<this._dim; ++i) {
-        this._data[i] = add([ this._data[i], -vector._data[i] ]);
+        this._data[i] = add2([ this._data[i], -vector._data[i] ]);
       }
 
       return this;
@@ -214,7 +215,7 @@
       var a = new Array(this._dim);
 
       for (var i=0; i<this._dim; ++i) {
-        a[i] = add([ this._data[i], vector._data[i] ]);
+        a[i] = add2([ this._data[i], vector._data[i] ]);
       }
 
       return new Vector(a);
@@ -234,7 +235,7 @@
       }
 
       for (var i=0; i<this._dim; ++i) {
-        this._data[i] = add([ this._data[i], vector._data[i] ]);
+        this._data[i] = add2([ this._data[i], vector._data[i] ]);
       }
 
       return this;
