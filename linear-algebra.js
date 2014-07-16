@@ -122,7 +122,7 @@
 
 
     /**
-     * Scale this vector.
+     * Scale this vector in-place.
      * @param  {Number} scale Scaling factor.
      * @return this
      */
@@ -130,8 +130,6 @@
       for (var i = 0; i<this._dim; ++i) {
         this._data[i] *= scale;
       }
-
-      return this;
     };
 
 
@@ -186,7 +184,7 @@
 
 
     /**
-     * Scale this matrix.
+     * Scale this matrix in-place
      * @param  {Number} scale Scaling factor.
      * @return this
      */
@@ -196,8 +194,6 @@
           this._data[i][j] *= scale;
         }
       }
-
-      return this;
     };
 
 

@@ -53,9 +53,8 @@ console.log( v.size() );     // 3
 console.log( v.data() );     // [1, 2, 3]
 
 // Scaling
-var vScaled = v.scale(2);
+v.scale(2);
 console.log(vScaled.data());     // [2, 4, 6]
-console.log(vScaled === v);     // true - the Vector is scaled in-place
 
 // Dot-product
 var v1 = new Vector( [1, 2, 3]);
@@ -74,10 +73,15 @@ console.log( m.isMatrix );   // true
 console.log( m.size() );     // [2, 3]
 console.log( m.data() );     // [ [1, 2, 3], [4, 5, 6] ]
 
-// Scaling
-var mScaled = m.scale(2);
+// Scaling (in-place)
+m.scale(2);
 console.log(mScaled.data());     // [ [2, 4, 6], [8, 10, 12] ]
-console.log(mScaled === m);     // true - the Matrix is scaled in-place
+
+// Transpose
+var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
+var mTranspose = m.transpose();
+console.log(mTranspose.data());     // [ [1, 4], [2, 5], [3, 6] ]
+console.log(mTranspose === m);     // false - mTranspose is a new matrix
 
 // Multiplication with a vector
 var m1 = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );

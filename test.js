@@ -52,7 +52,8 @@ test['Vector'] = {
   },
   'scale': function() {
     var v = new this.Vector([1,2,3]);
-    v.scale(2).scale(3);
+    v.scale(2)
+    v.scale(3);
     v.data().should.eql([6, 12, 18]);
   },
   'dot product': {
@@ -115,7 +116,8 @@ test['Matrix'] = {
   'scale': function() {
     var a = [ [1,2], [3,4], [5,6] ];
     var m = new this.Matrix(a);
-    m.scale(2).scale(3);
+    m.scale(2);
+    m.scale(3);
     m.data().should.eql([ [6,12], [18,24], [30,36] ]);
   },
   'transpose': function() {
