@@ -56,9 +56,16 @@ console.log( v.data() );     // [1, 2, 3]
 v.scale(2);
 console.log(vScaled.data());     // [2, 4, 6]
 
-// Dot-product
+// Subtraction
 var v1 = new Vector( [1, 2, 3]);
 var v2 = new Vector( [0.1, -2, 4] );
+var v3 = v1.minus(v2);
+console.log( v3.data() );        // [ 0.9, 4, -1 ]
+console.log( v3 === v1 || v3 === v2 );  // false - v3 is a new Vector
+
+// Dot-product
+v1 = new Vector( [1, 2, 3]);
+v2 = new Vector( [0.1, -2, 4] );
 var prod = v1.dot(v2);
 console.log(prod);   // 8.1
 ```

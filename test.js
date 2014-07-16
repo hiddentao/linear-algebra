@@ -56,6 +56,25 @@ test['Vector'] = {
     v.scale(3);
     v.data().should.eql([6, 12, 18]);
   },
+  'minus': {
+    'different size': function() {
+      var v1 = new this.Vector([1,2]),
+        v2 = new this.Vector([4]);
+
+      expect(function() {
+        v1.minus(v2);
+      }).to.throw('Vector subtraction requires vectors to have same size');
+    },
+    'same size': function() {
+      var v1 = new this.Vector([1.1, 2]),
+        v2 = new this.Vector([4, 0.2]),
+        v3 = v1.minus(v2);
+
+      v3.should.be.instanceOf(this.Vector);
+      v3.data().should.eql([ 1.1-4, 2 - 0.2 ]);
+      (v3 === v1 || v3 === v2).should.be.false;
+    }
+  },
   'dot product': {
     'different size': function() {
       var v1 = new this.Vector([1,2]),

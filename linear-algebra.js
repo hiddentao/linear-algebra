@@ -47,6 +47,10 @@
 
     // default adder
     var add = options.add || function(floats) {
+      if (2 === floats.length) {
+        return floats[0] + floats[1];
+      }
+
       var ret = floats[0];
 
       for (var i=1; i<floats.length; ++i) {
@@ -137,10 +141,32 @@
     };
 
 
+
+    /**
+     * Subtract another vector from this one.
+     * @param  {Vector} vector.
+     * @return {Vector}
+     */
+    Vector.prototype.minus = function(vector) {
+      if (this._dim !== vector._dim) {
+        throw new Error('Vector subtraction requires vectors to have same size');
+      }
+
+      var a = new Array(this._dim);
+
+      for (var i=0; i<this._dim; ++i) {
+        a[i] = add([ this._data[i], -vector._data[i] ]);
+      }
+
+      return new Vector(a);
+    };
+
+
+
     /**
      * Compute dot product of this vector with another one.
      * @param  {Vector} vector.
-     * @return {NumArray}
+     * @return {Number}
      */
     Vector.prototype.dot = function(vector) {
       if (this._dim !== vector._dim) {
