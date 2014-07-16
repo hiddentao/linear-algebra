@@ -211,6 +211,26 @@ test['Matrix'] = {
     res.should.be.instanceOf(this.Matrix);
     res.data().should.eql([ [1, 3, 5], [2, 4, 6] ]);
   },
+  'dot product': {
+    'wrong size': function() {
+      var a = [ [1,2], [3,4], [5,6] ];
+      var m = new this.Matrix(a);
+
+      var v = new this.Vector([1,2, 3]);
+
+      expect(function() {
+        m.dot(1, v);
+      }).to.throw('Vector dot product requires this.columns = vector.size');
+    },
+    'right size': function() {
+      var a = [ [1,2], [3,4], [5,6] ];
+      var m = new this.Matrix(a);
+
+      var v = new this.Vector([2, 3.1]);
+
+      m.dot(1, v).should.eql(18.4);
+    }
+  },
   'mul': {
     beforeEach: function() {
       var a = [ [1,2], [3,4], [5,6] ];

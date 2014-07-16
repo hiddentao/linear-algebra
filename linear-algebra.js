@@ -354,6 +354,32 @@
 
 
 
+
+    /**
+     * Compute dot product of given row with a vector.
+     * 
+     * @param {Number} rowNum 0-based row index.
+     * @param  {Vector} vector.
+     * 
+     * @return {Number}
+     */
+    Matrix.prototype.dot = function(rowNum, vector) {
+      if (this._cols !== vector._dim) {
+        throw new Error('Vector dot product requires this.columns = vector.size');
+      }
+
+      var a = new Array(this._cols);
+
+      for (var j=0; j<this._cols; ++j) {
+        a[j] = this._data[rowNum][j] * vector._data[j];
+      }
+
+      return add(a);
+    };
+
+
+
+
     /**
      * Multiply this matrix by a matrix or vector.
      * @param  {Matrix|Vector} arg Matrix or vector.

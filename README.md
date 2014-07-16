@@ -4,7 +4,7 @@
 
 Efficient, high-performance linear algebra library for node.js and browsers.
 
-This is a low-level algebra library which supports basic vector and matrix operations. It is designed with both precision and performance in mind.
+This is a low-level algebra library which supports basic vector and matrix operations, and has been designed with machine learning algorithms in mind.
 
 Features:
 
@@ -126,6 +126,12 @@ m1 = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
 m2 = new Matrix( [ [1, 2], [4, 5], [-3, -6] ] );
 var m3 = m1.mul(m2);
 console.log(m3.data());     // [ [0, -6], [2, -3] ]
+
+// Dot-product of a specific row with a vector
+var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
+var v = new Vector( [ -1, -2, -4] );
+var prod = m.dot(1, v); // 1 = second row 
+console.log( prod );  // -38
 ```
 
 The `Matrix` class provides a few static helper methods for creating specific types of matrices:
