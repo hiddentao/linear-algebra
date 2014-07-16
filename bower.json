@@ -5,7 +5,7 @@
   "authors": [
     "Ramesh Nair <ram@hiddentao.com>"
   ],
-  "description": "Efficient, high-performance linear algebra library",
+  "description": "Efficient, high-precision linear algebra library",
   "moduleType": [
     "amd",
     "globals",

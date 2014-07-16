@@ -1,7 +1,7 @@
 {
   "name": "linear-algebra",
   "version": "1.0.0",
-  "description": "Efficient, high-performance linear algebra library",
+  "description": "Efficient, high-precision linear algebra library",
   "main": "linear-algebra.js",
   "scripts": {
     "test": "gulp",
