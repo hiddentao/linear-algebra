@@ -38,7 +38,7 @@ In the browser the library is exposed via the `linearAlgebra()` function.
 The examples below assume you are running in node.js. The library needs to be initialised once loaded:
 
 ```javascript
-var linearAlgebra = require('linearAlgebra')(),     // initialise it
+var linearAlgebra = require('linear-algebra')(),     // initialise it
     Vector = linearAlgebra.Vector,
     Matrix = linearAlgebra.Matrix;
 ```
