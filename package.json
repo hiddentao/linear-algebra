@@ -1,0 +1,44 @@
+{
+  "name": "linear-algebra",
+  "version": "1.0.0",
+  "description": "Efficient, high-performance linear algebra library",
+  "main": "linear-algebra.js",
+  "scripts": {
+    "test": "gulp",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hiddentao/linear-algebra.git"
+  },
+  "keywords": [
+    "linear",
+    "algebra",
+    "math",
+    "precision",
+    "float",
+    "numerical",
+    "analysis",
+    "regression",
+    "machine",
+    "learning"
+  ],
+  "author": "Ramesh Nair <ram@hiddentao.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiddentao/linear-algebra/issues"
+  },
+  "homepage": "https://github.com/hiddentao/linear-algebra",
+  "devDependencies": {
+    "gulp-uglify": "~0.3.0",
+    "gulp-expect-file": "0.0.7",
+    "gulp-mocha": "~0.4.1",
+    "gulp-jshint": "~1.6.3",
+    "gulp": "~3.8.1",
+    "gulp-concat": "~2.2.0",
+    "run-sequence": "~0.3.6",
+    "chai": "~1.9.1",
+    "sinon": "~1.10.2",
+    "sinon-chai": "~2.5.0"
+  }
+}

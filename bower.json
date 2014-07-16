@@ -1,0 +1,35 @@
+{
+  "name": "linear-algebra",
+  "main": "linear-algebra.js",
+  "version": "1.0.0",
+  "authors": [
+    "Ramesh Nair <ram@hiddentao.com>"
+  ],
+  "description": "Efficient, high-performance linear algebra library",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "linear",
+    "algebra",
+    "math",
+    "precision",
+    "float",
+    "numerical",
+    "analysis",
+    "regression",
+    "machine",
+    "learning"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/hiddentao/linear-algebra",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "test.js"
+  ]
+}
