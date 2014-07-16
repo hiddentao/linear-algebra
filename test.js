@@ -52,8 +52,14 @@ test['Vector'] = {
   },
   'scale': function() {
     var v = new this.Vector([1,2,3]);
-    v.scale(2)
-    v.scale(3);
+    var v2 = v.scale(6);
+    v2.should.not.eql(v);
+    v2.should.be.instanceOf(this.Vector);
+    v2.data().should.eql([6, 12, 18]);
+  },
+  'scale in-place': function() {
+    var v = new this.Vector([1,2,3]);
+    v.scaleP(6).should.eql(v);
     v.data().should.eql([6, 12, 18]);
   },
   'minus': {
@@ -73,6 +79,24 @@ test['Vector'] = {
       v3.should.be.instanceOf(this.Vector);
       v3.data().should.eql([ 1.1-4, 2 - 0.2 ]);
       (v3 === v1 || v3 === v2).should.be.false;
+    }
+  },
+  'minus in-place': {
+    'different size': function() {
+      var v1 = new this.Vector([1,2]),
+        v2 = new this.Vector([4]);
+
+      expect(function() {
+        v1.minusP(v2);
+      }).to.throw('Vector subtraction requires vectors to have same size');
+    },
+    'same size': function() {
+      var v1 = new this.Vector([1.1, 2]),
+        v2 = new this.Vector([4, 0.2]),
+        v3 = v1.minusP(v2);
+
+      v3.should.eql(v1);
+      v1.data().should.eql([ 1.1-4, 2 - 0.2 ]);
     }
   },
   'dot product': {
@@ -131,8 +155,14 @@ test['Matrix'] = {
   'scale': function() {
     var a = [ [1,2], [3,4], [5,6] ];
     var m = new this.Matrix(a);
-    m.scale(2);
-    m.scale(3);
+    var m2 = m.scale(6);
+    m2.should.not.eql(m);
+    m2.data().should.eql([ [6,12], [18,24], [30,36] ]);
+  },
+  'scale in-place': function() {
+    var a = [ [1,2], [3,4], [5,6] ];
+    var m = new this.Matrix(a);
+    m.scaleP(6).should.eql(m);
     m.data().should.eql([ [6,12], [18,24], [30,36] ]);
   },
   'transpose': function() {

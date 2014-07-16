@@ -130,14 +130,32 @@
 
 
     /**
+     * Scale this vector.
+     * @param  {Number} scale Scaling factor.
+     * @return {Vector} new vector
+     */
+    Vector.prototype.scale = function(scale) {
+      var a = new Array(this._dim);
+
+      for (var i = 0; i<this._dim; ++i) {
+        a[i] = this._data[i] * scale;
+      }
+
+      return new Vector(a);
+    };
+
+
+
+    /**
      * Scale this vector in-place.
      * @param  {Number} scale Scaling factor.
      * @return this
      */
-    Vector.prototype.scale = function(scale) {
+    Vector.prototype.scaleP = function(scale) {
       for (var i = 0; i<this._dim; ++i) {
         this._data[i] *= scale;
       }
+      return this;
     };
 
 
@@ -145,7 +163,7 @@
     /**
      * Subtract another vector from this one.
      * @param  {Vector} vector.
-     * @return {Vector}
+     * @return {Vector} new vector
      */
     Vector.prototype.minus = function(vector) {
       if (this._dim !== vector._dim) {
@@ -160,6 +178,26 @@
 
       return new Vector(a);
     };
+
+
+
+    /**
+     * Subtract another vector from this one, in-place.
+     * @param  {Vector} vector.
+     * @return this
+     */
+    Vector.prototype.minusP = function(vector) {
+      if (this._dim !== vector._dim) {
+        throw new Error('Vector subtraction requires vectors to have same size');
+      }
+
+      for (var i=0; i<this._dim; ++i) {
+        this._data[i] = add([ this._data[i], -vector._data[i] ]);
+      }
+
+      return this;
+    };
+
 
 
 
@@ -214,16 +252,61 @@
 
 
     /**
+     * Scale this matrix
+     * @param  {Number} scale Scaling factor.
+     * @return {Matrix} new matrix.
+     */
+    Matrix.prototype.scale = function(scale) {
+      var a = new Array(this._rows);
+
+      for (var i = 0; i<this._rows; ++i) {
+        a[i] = new Array(this._cols);
+
+        for (var j = 0; j<this._cols; ++j) {
+          a[i][j] = this._data[i][j] * scale;
+        }
+      }
+
+      return new Matrix(a);
+    };
+
+
+
+
+    /**
+     * Scale this matrix
+     * @param  {Number} scale Scaling factor.
+     * @return {Matrix} new matrix.
+     */
+    Matrix.prototype.scale = function(scale) {
+      var a = new Array(this._rows);
+
+      for (var i = 0; i<this._rows; ++i) {
+        a[i] = new Array(this._cols);
+
+        for (var j = 0; j<this._cols; ++j) {
+          a[i][j] = this._data[i][j] * scale;
+        }
+      }
+
+      return new Matrix(a);
+    };
+
+
+
+    /**
      * Scale this matrix in-place
      * @param  {Number} scale Scaling factor.
      * @return this
      */
-    Matrix.prototype.scale = function(scale) {
+    Matrix.prototype.scaleP = function(scale) {
       for (var i = 0; i<this._rows; ++i) {
         for (var j = 0; j<this._cols; ++j) {
           this._data[i][j] *= scale;
         }
       }
+
+      return this;
     };
 
 
