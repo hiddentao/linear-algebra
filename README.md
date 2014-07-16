@@ -61,11 +61,29 @@ v = new Vector( [1, 2, 3] );
 v.scaleP(2);
 console.log(v.data());     // [2, 4, 6]
 
+// Addition
+var v1 = new Vector( [1, 2, 3]);
+var v2 = new Vector( [0.1, -2, 4] );
+var v3 = v1.plus(v2);
+console.log( v3.data() );        // [ 1.1, 0, 7 ]
+
+// Addition in-place
+var v1 = new Vector( [1, 2, 3]);
+var v2 = new Vector( [0.1, -2, 4] );
+v1.plusP(v2);
+console.log( v1.data() );        // [ 1.1, 0, 7 ]
+
 // Subtraction
 var v1 = new Vector( [1, 2, 3]);
 var v2 = new Vector( [0.1, -2, 4] );
 var v3 = v1.minus(v2);
 console.log( v3.data() );        // [ 0.9, 4, -1 ]
+
+// Subtraction in-place
+var v1 = new Vector( [1, 2, 3]);
+var v2 = new Vector( [0.1, -2, 4] );
+v1.minusP(v2);
+console.log( v1.data() );        // [ 0.9, 4, -1 ]
 
 // Dot-product
 v1 = new Vector( [1, 2, 3]);

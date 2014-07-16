@@ -202,6 +202,48 @@
 
 
     /**
+     * Add another vector to this one.
+     * @param  {Vector} vector.
+     * @return {Vector} new vector
+     */
+    Vector.prototype.plus = function(vector) {
+      if (this._dim !== vector._dim) {
+        throw new Error('Vector addition requires vectors to have same size');
+      }
+
+      var a = new Array(this._dim);
+
+      for (var i=0; i<this._dim; ++i) {
+        a[i] = add([ this._data[i], vector._data[i] ]);
+      }
+
+      return new Vector(a);
+    };
+
+
+
+
+    /**
+     * Add another vector to this one, in-place.
+     * @param  {Vector} vector.
+     * @return this
+     */
+    Vector.prototype.plusP = function(vector) {
+      if (this._dim !== vector._dim) {
+        throw new Error('Vector addition requires vectors to have same size');
+      }
+
+      for (var i=0; i<this._dim; ++i) {
+        this._data[i] = add([ this._data[i], vector._data[i] ]);
+      }
+
+      return this;
+    };
+
+
+
+
+    /**
      * Compute dot product of this vector with another one.
      * @param  {Vector} vector.
      * @return {Number}

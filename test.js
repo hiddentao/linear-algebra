@@ -99,6 +99,43 @@ test['Vector'] = {
       v1.data().should.eql([ 1.1-4, 2 - 0.2 ]);
     }
   },
+  'plus': {
+    'different size': function() {
+      var v1 = new this.Vector([1,2]),
+        v2 = new this.Vector([4]);
+
+      expect(function() {
+        v1.plus(v2);
+      }).to.throw('Vector addition requires vectors to have same size');
+    },
+    'same size': function() {
+      var v1 = new this.Vector([1.1, 2]),
+        v2 = new this.Vector([4, 0.2]),
+        v3 = v1.plus(v2);
+
+      v3.should.be.instanceOf(this.Vector);
+      v3.data().should.eql([ 1.1+4, 2+0.2 ]);
+      (v3 === v1 || v3 === v2).should.be.false;
+    }
+  },
+  'plus in-place': {
+    'different size': function() {
+      var v1 = new this.Vector([1,2]),
+        v2 = new this.Vector([4]);
+
+      expect(function() {
+        v1.plusP(v2);
+      }).to.throw('Vector addition requires vectors to have same size');
+    },
+    'same size': function() {
+      var v1 = new this.Vector([1.1, 2]),
+        v2 = new this.Vector([4, 0.2]),
+        v3 = v1.plusP(v2);
+
+      v3.should.eql(v1);
+      v1.data().should.eql([ 1.1+4, 2+0.2 ]);
+    }
+  },
   'dot product': {
     'different size': function() {
       var v1 = new this.Vector([1,2]),
