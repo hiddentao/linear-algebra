@@ -71,12 +71,8 @@ test['Vector'] = {
         v1dot2 = v1.dot(v2),
         v2dot1 = v2.dot(v1);
 
-      v1dot2.should.be.instanceOf(this.Vector);
-      v2dot1.should.be.instanceOf(this.Vector);
-
-      v1dot2.data().should.eql(v2dot1.data());
-
-      v1dot2.data().should.eql([4.4, 0.4]);
+      v1dot2.should.eql(v2dot1);
+      v1dot2.should.eql(4.4 + 0.4);
     }
   },
 };
@@ -189,6 +185,29 @@ test['Matrix'] = {
   }
 };
 
+
+
+test['Initializer options'] = {
+  'custom adder': function() {
+    // dummy adder skips every other value and then adds 0.5 to result
+    var adder = function(floats) {
+      var ret = 0;
+      for (var i=0; i<floats.length; i+=2) {
+        ret += floats[i];
+      }
+      return ret + 0.5;
+    };
+
+    var Vector = linAlg({
+      add: adder
+    }).Vector;
+
+    var v1 = new Vector([0.1, 0.2, 0.3]),
+      v2 = new Vector([2, 5, 10]);
+
+    v1.dot(v2).should.eql(0.1*2 + 0.3*10 + 0.5); 
+  }
+};
 
 
 

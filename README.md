@@ -59,9 +59,8 @@ console.log(vScaled.data());     // [2, 4, 6]
 // Dot-product
 var v1 = new Vector( [1, 2, 3]);
 var v2 = new Vector( [0.1, -2, 4] );
-var v3 = v1.dot(v2);
-console.log(v3.data());     // [0.1, -4, 12]
-console.log(v3 === v1 || v3 === v2);     // false - v3 is a new Vector
+var prod = v1.dot(v2);
+console.log(prod);   // 8.1
 ```
 
 ### Matrices
@@ -116,13 +115,18 @@ console.log(m.data());      // [ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]
 
 When adding floating point numbers together the end result is sometimes off by a minor decimal point (to see this try `0.1 + 0.2` in your JS console). 
 
-This module allows you to supply a custom adder function as a parameter to the `linAlg()` call. So if you like you can use the [`add`](https://www.npmjs.org/package/add) module by doing:
+This module allows you to supply a custom adder function as an option to the initialization call. So if you like you can use the [`add`](https://www.npmjs.org/package/add) module by doing:
 
 ```javascript
-var add = require('add');
-
 // we pass the 'add' function in as a parameter...
-var linearAlgebra = require('linear-algebra')(add);
+var linearAlgebra = require('linear-algebra')({
+    add: require('add')
+});
+
+/*
+From now on all floating point addition within the library will be 
+performed using the `add()` method passed in.
+*/
 
 var Vector = linearAlgebra.Vector,
     Matrix = linearAlgebra.Matrix;

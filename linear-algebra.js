@@ -36,13 +36,17 @@
 
   /**
    * Initialise the linear algebra library.
+   *
+   * @param {Object} options Additional options.
+   * @param {Function} [options.add] Function to add floating point numbers.
    * 
-   * @param  {Function} add Function to add floating point numbers, accepts an array as parameter.
    * @return {Object} Linear algebra primitives.
    */
-  return function(add) {
+  return function(options) {
+    options = options || {};
+
     // default adder
-    add = add || function(floats) {
+    var add = options.add || function(floats) {
       var ret = floats[0];
 
       for (var i=1; i<floats.length; ++i) {
@@ -149,7 +153,7 @@
         a[i] = this._data[i] * vector._data[i];
       }
 
-      return new Vector(a);
+      return add(a);
     };
 
 
