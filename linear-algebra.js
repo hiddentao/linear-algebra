@@ -294,32 +294,6 @@
 
 
     /**
-     * Create a diagonal matrix.
-     * @param  {Array} entrires Diagonal entries.
-     * @return {Matrix}
-     */
-    Matrix.diagonal = function(entries) {
-      var dim = entries.length,
-        i, j;
-
-      var a = new Array(dim);
-      for (i=0; i<dim; ++i) {
-        a[i] = new Array(dim);
-
-        for (j=0; j<dim; ++j) {
-          a[i][j] = 0;
-        }
-
-        a[i][i] = entries[i];
-      }
-
-      return new Matrix(a);
-    };
-
-
-
-
-    /**
      * Create a scalar diagonal matrix.
      * @param {Integer} dim Matrix size (length of each side)
      * @param  {Number} entry The value to place in each diagonal.

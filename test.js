@@ -173,12 +173,6 @@ test['Matrix'] = {
       }
     }
   },
-  'diagonal': function() {
-    var m1 = this.Matrix.diagonal([1, 2, 5]);
-
-    m1.should.be.instanceOf(this.Matrix);
-    m1.data().should.eql([ [1, 0, 0], [0, 2, 0], [0, 0, 5] ]);
-  },
   'scalar': function() {
     var m1 = this.Matrix.scalar(3, 1.2);
 

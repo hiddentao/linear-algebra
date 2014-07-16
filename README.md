@@ -10,7 +10,7 @@ Features:
 
 * Provides `Vector` and `Matrix` objects.
 * Uses arrays internally for high performance.
-* Enhanced floating point [summation accuracy](#increased-precision)
+* Enhanced [floating point precision](#increased-precision)
 * Comprehensive test coverage.
 * Performance benchmarks.
 * Works in node.js and in browsers.
@@ -92,6 +92,20 @@ m2 = new Matrix( [ [1, 2], [4, 5], [-3, -6] ] );
 var m3 = m1.mul(m2);
 console.log(m3.data());     // [ [0, -6], [2, -3] ]
 console.log(m3 === m1 || m3 === m2);     // false - m3 is a new Matrix
+```
+
+The `Matrix` class provides a few static helper methods for creating specific types of matrices:
+
+```javascript
+// Create a scalar (diagonal) matrix
+var m = Matrix.scalar(3, 5);
+console.log(m.size());      // 3
+console.log(m.data());      // [ [5, 0, 0], [0, 5, 0], [0, 0, 5] ]
+
+// Create an identity matrix
+m = Matrix.identity(3);
+console.log(m.size());      // 3
+console.log(m.data());      // [ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]
 ```
 
 ### Increased precision
