@@ -29,20 +29,18 @@ test['node interface'] = {
   },
   'init': {
     'normal': function() {
-      mocker.stub(linAlg, '_normal', function() {
-        return 'abc';
-      });
+      mocker.spy(linAlg, '_normal');
 
-      linAlg().should.eql('abc');
+      var LinAlg = linAlg();
+      LinAlg.Vector.should.be.instanceof(Function);
     },
     'precision': function() {
-      mocker.stub(linAlg, '_precision', function() {
-        return 'abc';
-      });
+      mocker.spy(linAlg, '_precision');
 
-      linAlg({
+      var LinAlg = linAlg({
         add: true
-      }).should.eql('abc');
+      });
+      LinAlg.Vector.should.be.instanceof(Function);
     },    
   }
 };
