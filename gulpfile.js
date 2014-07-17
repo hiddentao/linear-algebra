@@ -9,11 +9,6 @@ var mocha = require('gulp-mocha');
 var runSequence = require('run-sequence');
 
 
-// gulp.task('jshint', function() {
-// });
-
-
-
 gulp.task('build-lib', function() {
   return gulp.src( [
       './src/_header.js',

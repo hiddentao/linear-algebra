@@ -15,7 +15,7 @@ Features:
 * Comprehensive unit tests.
 * Works in node.js and in browsers.
 * Has no other dependencies.
-* Small: <2 KB minified and gzipped.
+* Small: ~1 KB minified and gzipped.
 
 ## Installation
 
@@ -152,21 +152,33 @@ console.log(m.data());      // [ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]
 
 When adding floating point numbers together the end result is sometimes off by a minor decimal point (to see this try `0.1 + 0.2` in your JS console). 
 
-This module allows you to supply a custom adder function as an option to the initialization call. So if you like you can use the [`add`](https://www.npmjs.org/package/add) module by doing:
+This module allows you to supply a custom adder (e.g. [`add`](https://www.npmjs.org/package/add)) as an option to the initialization call.
+
+In node.js:
 
 ```javascript
 // we pass the 'add' function in as a parameter...
-var linearAlgebra = require('linear-algebra')({
+var linAlg = require('linear-algebra')({
     add: require('add')
-});
+}),
+    Vector = linAlg.Vector,
+    Matrix = linAlg.Matrix;
+```
 
-/*
-From now on all floating point addition within the library will be 
-performed using the `add()` method passed in.
-*/
+In the browser we need to load in the higher-precision version of the library:
 
-var Vector = linearAlgebra.Vector,
-    Matrix = linearAlgebra.Matrix;
+```html
+<script type="text/javascript" src="linear-algebra.precision.js" />
+```
+
+Then we initialise it with an adder (mandatory when using the higher-precision version of the library):
+
+```javascript
+var linAlg = linearAlgebra({
+    add: add()
+}),
+    Vector = linAlg.Vector,
+    Matrix = linAlg.Matrix;
 ```
 
 ## Building

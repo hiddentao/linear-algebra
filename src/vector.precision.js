@@ -56,10 +56,9 @@ Vector.prototype.minusP = function(vector) {
     _throwError('Vector subtraction requires vectors to have same size');
   }
 
-    for (var i=0; i<this._dim; ++i) {
-      this._data[i] = adder([this._data[i], -vector._data[i]]);
-    }        
-  }
+  for (var i=0; i<this._dim; ++i) {
+    this._data[i] = adder([this._data[i], -vector._data[i]]);
+  }        
 
   return this;
 };

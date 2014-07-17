@@ -261,31 +261,6 @@ Matrix.prototype.scaleP = function(scale) {
 
 
 /**
- * Compute dot product of given row with a vector.
- * 
- * @param {Number} rowNum 0-based row index.
- * @param  {Vector} vector.
- * 
- * @return {Number}
- */
-Matrix.prototype.dot = function(rowNum, vector) {
-  if (this._cols !== vector._dim) {
-    _throwError('Vector dot product requires this.columns = vector.size');
-  }
-
-  var a = new Array(this._cols);
-
-  for (var j=0; j<this._cols; ++j) {
-    a[j] = this._data[rowNum][j] * vector._data[j];
-  }
-
-  return add(a);
-};
-
-
-
-
-/**
  * Get transpose of this matrix.
  * @return {Matrix}
  */
@@ -400,10 +375,9 @@ Vector.prototype.minusP = function(vector) {
     _throwError('Vector subtraction requires vectors to have same size');
   }
 
-    for (var i=0; i<this._dim; ++i) {
-      this._data[i] = this._data[i] - vector._data[i];
-    }        
-  }
+  for (var i=0; i<this._dim; ++i) {
+    this._data[i] = this._data[i] - vector._data[i];
+  }        
 
   return this;
 };
