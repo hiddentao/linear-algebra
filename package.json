@@ -1,8 +1,8 @@
 {
   "name": "linear-algebra",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Efficient, high-precision linear algebra library",
-  "main": "linear-algebra.js",
+  "main": "index.js",
   "scripts": {
     "test": "gulp",
     "build": "gulp"
@@ -39,6 +39,7 @@
     "run-sequence": "~0.3.6",
     "chai": "~1.9.1",
     "sinon": "~1.10.2",
-    "sinon-chai": "~2.5.0"
+    "sinon-chai": "~2.5.0",
+    "add": "~2.0.6"
   }
 }
