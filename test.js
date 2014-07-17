@@ -10,7 +10,7 @@ var chai = require('chai'),
 chai.use(require('sinon-chai'));
 
 
-var linAlg = require('./linear-algebra.min');
+var linAlg = require('./dist/linear-algebra.min');
 
 
 var mocker = null;
