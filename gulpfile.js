@@ -40,7 +40,10 @@ gulp.task('build-precision-lib', function() {
 
 
 gulp.task('jshint', ['build-lib', 'build-precision-lib'], function() {
-  return gulp.src('./dist/*.js')
+  return gulp.src([
+        './dist/linear-algebra.js', 
+        './dist/linear-algebra.precision.js'
+    ])
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'))
@@ -72,17 +75,17 @@ gulp.task('js', ['minify-lib', 'minify-precision-lib']);
 gulp.task('verify-js', function() {
   return gulp.src( path.join('./dist/*.js') )
     .pipe( expect([
-      'linear-algebra.js',
-      'linear-algebra.min.js',
-      'linear-algebra.precision.js',
-      'linear-algebra.precision.min.js',
+      'dist/linear-algebra.js',
+      'dist/linear-algebra.min.js',
+      'dist/linear-algebra.precision.js',
+      'dist/linear-algebra.precision.min.js',
     ]) )
   ;
 })
 
 
 gulp.task('test', function () {
-  return gulp.src('./test.js', { read: false })
+  return gulp.src('./test/*.test.js', { read: false })
       .pipe(mocha({
         ui: 'exports',
         reporter: 'spec'

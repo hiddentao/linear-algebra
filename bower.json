@@ -29,7 +29,8 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "gulpfile.js",
-    "test.js"
+    "src",
+    "test",
+    "gulpfile.js"
   ]
 }
