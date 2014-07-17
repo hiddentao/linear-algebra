@@ -1,7 +1,6 @@
 "use strict";
 
-var _ = require('lodash'),
-  sinon = require('sinon'),
+var sinon = require('sinon'),
   chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
