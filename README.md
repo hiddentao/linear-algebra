@@ -188,7 +188,7 @@ To build the code and run the tests:
 
     $ npm install -g gulp
     $ npm install
-    $ gulp
+    $ npm run build
 
 
 ## Contributing
