@@ -168,6 +168,7 @@ var linAlg = require('linear-algebra')({
 In the browser we need to load in the higher-precision version of the library:
 
 ```html
+<script type="text/javascript" src="add.js" />
 <script type="text/javascript" src="linear-algebra.precision.js" />
 ```
 
@@ -175,7 +176,7 @@ Then we initialise it with an adder (mandatory when using the higher-precision v
 
 ```javascript
 var linAlg = linearAlgebra({
-    add: add()
+    add: add
 }),
     Vector = linAlg.Vector,
     Matrix = linAlg.Matrix;
