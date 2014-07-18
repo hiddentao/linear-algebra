@@ -11,7 +11,7 @@ Features:
 * Provides `Vector` and `Matrix` objects.
 * Uses arrays internally for high performance.
 * Can perform basic arithmetic in-place for more efficiency.
-* Enhanced [floating point precision](#increased-precision)
+* Enhanced [floating point precision](#higher-precision)
 * Comprehensive unit tests.
 * Works in node.js and in browsers.
 * Has no other dependencies.
@@ -148,7 +148,7 @@ console.log(m.size());      // 3
 console.log(m.data());      // [ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]
 ```
 
-### Increased precision
+### Higher precision
 
 When adding floating point numbers together the end result is sometimes off by a minor decimal point (to see this try `0.1 + 0.2` in your JS console). 
 
@@ -180,6 +180,27 @@ var linAlg = linearAlgebra({
 }),
     Vector = linAlg.Vector,
     Matrix = linAlg.Matrix;
+```
+
+## Performance
+
+To run the performance benchmarks:
+
+```bash
+$ npm install -g gulp
+$ npm install
+$ gulp benchmark
+```
+
+Here is sample benchmark output:
+
+```bash
+[16:44:02] Running suite Normal vs High precision - matrix multiplication [/Users/home/dev/js/linear-algebra/benchmark/nvh-matrix-mul.js]...
+[16:44:08]    Normal precision (5x5 matrix) x 1,156,332 ops/sec ±4.39% (88 runs sampled)
+[16:44:13]    Normal precision (30x30 matrix) x 9,826 ops/sec ±2.15% (93 runs sampled)
+[16:44:19]    High precision (5x5 matrix) x 167,466 ops/sec ±2.60% (91 runs sampled)
+[16:44:24]    High precision (30x30 matrix) x 604 ops/sec ±0.67% (80 runs sampled)
+[16:44:24] Fastest test is Normal precision (5x5 matrix) at 6.9x faster than High precision (5x5 matrix)
 ```
 
 ## Building

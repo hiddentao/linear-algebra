@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
   path = require('path');
 
+var benchmark = require('gulp-bench');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
@@ -92,6 +93,14 @@ gulp.task('test', function () {
       }))
     ;
 });
+
+
+gulp.task('benchmark', function () {
+  return gulp.src('./benchmark/*.js', { read: false })
+      .pipe(benchmark())
+    ;
+});
+
 
 
 gulp.task('default', function(cb) {
