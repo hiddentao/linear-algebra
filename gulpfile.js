@@ -96,7 +96,7 @@ gulp.task('test', function () {
 
 
 gulp.task('benchmark', function () {
-  return gulp.src('./benchmark/*.js', { read: false })
+  return gulp.src('./benchmark/*.perf.js', { read: false })
       .pipe(benchmark())
     ;
 });
