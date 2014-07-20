@@ -15,14 +15,14 @@
  * @return {Number}
  */
 Matrix.prototype.dot = function(rowNum, vector) {
-  if (this._cols !== vector._dim) {
+  if (this.cols !== vector.size) {
     _throwError('Vector dot product requires this.columns = vector.size');
   }
 
-  var a = new Array(this._cols);
+  var a = new Array(this.cols);
 
-  for (var j=0; j<this._cols; ++j) {
-    a[j] = this._data[rowNum][j] * vector._data[j];
+  for (var j=0; j<this.cols; ++j) {
+    a[j] = this.data[rowNum][j] * vector.data[j];
   }
 
   return adder(a);
@@ -42,20 +42,20 @@ Matrix.prototype.mul = function(arg) {
 
   // matrix
   if (arg.isMatrix) {
-    if (this._cols !== arg._rows) {
+    if (this.cols !== arg.rows) {
       _throwError('Multiplying by matrix requires this.columns = matrix.rows');
     }
 
-    result = new Array(this._rows);
-    tmp = new Array(this._cols);
+    result = new Array(this.rows);
+    tmp = new Array(this.cols);
 
-    for (i=0; i<this._rows; ++i) {
-      result[i] = new Array(arg._cols);
+    for (i=0; i<this.rows; ++i) {
+      result[i] = new Array(arg.cols);
 
-      for (k=0; k<arg._cols; ++k) {
+      for (k=0; k<arg.cols; ++k) {
 
-        for (j=0; j<this._cols; ++j) {
-          tmp[j] = this._data[i][j] * arg._data[j][k];
+        for (j=0; j<this.cols; ++j) {
+          tmp[j] = this.data[i][j] * arg.data[j][k];
         }
 
         result[i][k] = adder(tmp);
@@ -66,18 +66,18 @@ Matrix.prototype.mul = function(arg) {
   }
   // vector
   else if (arg.isVector) {
-    if (this._cols !== arg._dim) {
+    if (this.cols !== arg.size) {
       _throwError('Multiplying by vector requires this.columns = vector.size');
     }
 
-    result = new Array(this._rows);
-    tmp = new Array(arg._dim);
+    result = new Array(this.rows);
+    tmp = new Array(arg.size);
 
-    for (i=0; i<this._rows; ++i) {
+    for (i=0; i<this.rows; ++i) {
 
-      for (j=0; j<this._cols; ++j) {
+      for (j=0; j<this.cols; ++j) {
         // store values to add in temporary array
-        tmp[j] = this._data[i][j] * arg._data[j];
+        tmp[j] = this.data[i][j] * arg.data[j];
       }
       // add up the values
       result[i] = adder(tmp);

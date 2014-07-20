@@ -7,42 +7,6 @@
 var LinAlg = {};
 
 
-// ------------------------------
-// NumArray - base class for vectors and matrices
-// ------------------------------
-
-
-/** 
- * Construct a vector.
- *
- * @param {Array} data Array of values representing vector.
- * 
- * @constructor
- */
-var NumArray = function(data) {
-  this._data = data;
-};
-
-
-
-/**
- * Size.
- */
-NumArray.prototype.size = function() {
-  return this._dim;
-};
-
-
-/**
- * Raw data.
- */
-NumArray.prototype.data = function() {
-  return this._data;
-};
-
-
-
-
 
 
 // ------------------------------
@@ -58,10 +22,9 @@ NumArray.prototype.data = function() {
  * @constructor
  */
 var Vector = LinAlg.Vector = function(data) {
-  NumArray.call(this, data);
-  this._dim = data.length;
+  this.data = data;
+  this.size = data.length;
 };
-_inherits(Vector, NumArray);
 
 
 /**
@@ -77,10 +40,10 @@ Object.defineProperty(Vector.prototype, 'isVector', { value: true } );
  * @return {Vector} new vector
  */
 Vector.prototype.scale = function(scale) {
-  var a = new Array(this._dim);
+  var a = new Array(this.size);
 
-  for (var i = 0; i<this._dim; ++i) {
-    a[i] = this._data[i] * scale;
+  for (var i = 0; i<this.size; ++i) {
+    a[i] = this.data[i] * scale;
   }
 
   return new Vector(a);
@@ -94,8 +57,8 @@ Vector.prototype.scale = function(scale) {
  * @return this
  */
 Vector.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this._dim; ++i) {
-    this._data[i] *= scale;
+  for (var i = 0; i<this.size; ++i) {
+    this.data[i] *= scale;
   }
   return this;
 };
@@ -119,12 +82,11 @@ Vector.prototype.scaleP = function(scale) {
  * @constructor
  */
 var Matrix = LinAlg.Matrix = function(data) {
-  NumArray.call(this, data);
-  this._rows = data.length;
-  this._cols = data[0].length;
-  this._dim = [this._rows, this._cols];
+  this.data = data;
+  this.rows = data.length;
+  this.cols = data[0].length;
+  this.size = [this.rows, this.cols];
 };
-_inherits(Matrix, NumArray);
 
 
 
@@ -141,13 +103,13 @@ Object.defineProperty(Matrix.prototype, 'isMatrix', { value: true });
  * @return {Matrix} new matrix.
  */
 Matrix.prototype.scale = function(scale) {
-  var a = new Array(this._rows);
+  var a = new Array(this.rows);
 
-  for (var i = 0; i<this._rows; ++i) {
-    a[i] = new Array(this._cols);
+  for (var i = 0; i<this.rows; ++i) {
+    a[i] = new Array(this.cols);
 
-    for (var j = 0; j<this._cols; ++j) {
-      a[i][j] = this._data[i][j] * scale;
+    for (var j = 0; j<this.cols; ++j) {
+      a[i][j] = this.data[i][j] * scale;
     }
   }
 
@@ -163,13 +125,13 @@ Matrix.prototype.scale = function(scale) {
  * @return {Matrix} new matrix.
  */
 Matrix.prototype.scale = function(scale) {
-  var a = new Array(this._rows);
+  var a = new Array(this.rows);
 
-  for (var i = 0; i<this._rows; ++i) {
-    a[i] = new Array(this._cols);
+  for (var i = 0; i<this.rows; ++i) {
+    a[i] = new Array(this.cols);
 
-    for (var j = 0; j<this._cols; ++j) {
-      a[i][j] = this._data[i][j] * scale;
+    for (var j = 0; j<this.cols; ++j) {
+      a[i][j] = this.data[i][j] * scale;
     }
   }
 
@@ -184,9 +146,9 @@ Matrix.prototype.scale = function(scale) {
  * @return this
  */
 Matrix.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this._rows; ++i) {
-    for (var j = 0; j<this._cols; ++j) {
-      this._data[i][j] *= scale;
+  for (var i = 0; i<this.rows; ++i) {
+    for (var j = 0; j<this.cols; ++j) {
+      this.data[i][j] *= scale;
     }
   }
 
@@ -202,14 +164,14 @@ Matrix.prototype.scaleP = function(scale) {
  * @return {Matrix}
  */
 Matrix.prototype.transpose = function() {
-  var result = new Array(this._cols),
+  var result = new Array(this.cols),
     i, j;
 
-  for (j=0; j<this._cols; ++j) {
-    result[j] = new Array(this._rows);
+  for (j=0; j<this.cols; ++j) {
+    result[j] = new Array(this.rows);
 
-    for (i=0; i<this._rows; ++i) {
-      result[j][i] = this._data[i][j];
+    for (i=0; i<this.rows; ++i) {
+      result[j][i] = this.data[i][j];
     }
   }
 

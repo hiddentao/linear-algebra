@@ -1,11 +1,11 @@
 {
   "name": "linear-algebra",
   "main": "dist/linear-algebra.js",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "authors": [
     "Ramesh Nair <ram@hiddentao.com>"
   ],
-  "description": "Efficient, high-precision linear algebra library",
+  "description": "Efficient, high-performance linear algebra library",
   "moduleType": [
     "amd",
     "globals",

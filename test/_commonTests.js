@@ -22,28 +22,28 @@ module.exports = function(linAlg, options) {
       new this.Vector([]).isVector.should.be.true;
     },
     'dimensions': function() {
-      new this.Vector([]).size().should.eql(0);
-      new this.Vector([1]).size().should.eql(1);
-      new this.Vector([1,2]).size().should.eql(2);
+      new this.Vector([]).size.should.eql(0);
+      new this.Vector([1]).size.should.eql(1);
+      new this.Vector([1,2]).size.should.eql(2);
     },
     'data': function() {
       var a = [];
-      new this.Vector(a).data().should.eql(a);
+      new this.Vector(a).data.should.eql(a);
 
       var b = [1,2];
-      new this.Vector(b).data().should.eql(b);
+      new this.Vector(b).data.should.eql(b);
     },
     'scale': function() {
       var v = new this.Vector([1,2,3]);
       var v2 = v.scale(6);
       v2.should.not.eql(v);
       v2.should.be.instanceOf(this.Vector);
-      v2.data().should.eql([6, 12, 18]);
+      v2.data.should.eql([6, 12, 18]);
     },
     'scale in-place': function() {
       var v = new this.Vector([1,2,3]);
       v.scaleP(6).should.eql(v);
-      v.data().should.eql([6, 12, 18]);
+      v.data.should.eql([6, 12, 18]);
     },
     'minus': {
       'different size': function() {
@@ -60,7 +60,7 @@ module.exports = function(linAlg, options) {
           v3 = v1.minus(v2);
 
         v3.should.be.instanceOf(this.Vector);
-        v3.data().should.eql([ 1.1-4, 2 - 0.2 ]);
+        v3.data.should.eql([ 1.1-4, 2 - 0.2 ]);
         (v3 === v1 || v3 === v2).should.be.false;
       }
     },
@@ -79,7 +79,7 @@ module.exports = function(linAlg, options) {
           v3 = v1.minusP(v2);
 
         v3.should.eql(v1);
-        v1.data().should.eql([ 1.1-4, 2 - 0.2 ]);
+        v1.data.should.eql([ 1.1-4, 2 - 0.2 ]);
       }
     },
     'plus': {
@@ -97,7 +97,7 @@ module.exports = function(linAlg, options) {
           v3 = v1.plus(v2);
 
         v3.should.be.instanceOf(this.Vector);
-        v3.data().should.eql([ 1.1+4, 2+0.2 ]);
+        v3.data.should.eql([ 1.1+4, 2+0.2 ]);
         (v3 === v1 || v3 === v2).should.be.false;
       }
     },
@@ -116,7 +116,7 @@ module.exports = function(linAlg, options) {
           v3 = v1.plusP(v2);
 
         v3.should.eql(v1);
-        v1.data().should.eql([ 1.1+4, 2+0.2 ]);
+        v1.data.should.eql([ 1.1+4, 2+0.2 ]);
       }
     },
     'dot product': {
@@ -163,27 +163,30 @@ module.exports = function(linAlg, options) {
       }).to.throw(Error);
 
       var a = [[]];
-      new this.Matrix(a).size().should.eql([1,0]);
+      new this.Matrix(a).size.should.eql([1,0]);
 
       a = [ [1,2], [3,4], [5,6] ];
-      new this.Matrix(a).size().should.eql([3,2]);
+      var m = new this.Matrix(a);
+      m.size.should.eql([3,2]);
+      m.rows.should.eql(3);
+      m.cols.should.eql(2);
     },
     'data': function() {
       var a = [ [1,2], [3,4], [5,6] ];
-      new this.Matrix(a).data().should.eql(a);
+      new this.Matrix(a).data.should.eql(a);
     },
     'scale': function() {
       var a = [ [1,2], [3,4], [5,6] ];
       var m = new this.Matrix(a);
       var m2 = m.scale(6);
       m2.should.not.eql(m);
-      m2.data().should.eql([ [6,12], [18,24], [30,36] ]);
+      m2.data.should.eql([ [6,12], [18,24], [30,36] ]);
     },
     'scale in-place': function() {
       var a = [ [1,2], [3,4], [5,6] ];
       var m = new this.Matrix(a);
       m.scaleP(6).should.eql(m);
-      m.data().should.eql([ [6,12], [18,24], [30,36] ]);
+      m.data.should.eql([ [6,12], [18,24], [30,36] ]);
     },
     'transpose': function() {
       var a = [ [1,2], [3,4], [5,6] ];
@@ -192,7 +195,7 @@ module.exports = function(linAlg, options) {
       var res = m.transpose();
 
       res.should.be.instanceOf(this.Matrix);
-      res.data().should.eql([ [1, 3, 5], [2, 4, 6] ]);
+      res.data.should.eql([ [1, 3, 5], [2, 4, 6] ]);
     },
     'dot product': {
       'wrong size': function() {
@@ -236,7 +239,7 @@ module.exports = function(linAlg, options) {
 
           res.should.be.instanceOf(this.Vector);
 
-          res.data().should.eql([ 2, 5, 8 ]);
+          res.data.should.eql([ 2, 5, 8 ]);
         }
       },
       'with matrix': {
@@ -256,7 +259,7 @@ module.exports = function(linAlg, options) {
 
           res.should.be.instanceOf(this.Matrix);
 
-          res.data().should.eql([ [6, -1, 18.5, 6], [17, 5, 37.5, 20], [28, 11, 56.5, 34] ]);
+          res.data.should.eql([ [6, -1, 18.5, 6], [17, 5, 37.5, 20], [28, 11, 56.5, 34] ]);
         }
       }
     },
@@ -264,13 +267,13 @@ module.exports = function(linAlg, options) {
       var m1 = this.Matrix.scalar(3, 1.2);
 
       m1.should.be.instanceOf(this.Matrix);
-      m1.data().should.eql([ [1.2, 0, 0], [0, 1.2, 0], [0, 0, 1.2] ]);
+      m1.data.should.eql([ [1.2, 0, 0], [0, 1.2, 0], [0, 0, 1.2] ]);
     },
     'identity': function() {
       var m1 = this.Matrix.identity(3);
 
       m1.should.be.instanceOf(this.Matrix);
-      m1.data().should.eql([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]);
+      m1.data.should.eql([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]);
     }
   };
 

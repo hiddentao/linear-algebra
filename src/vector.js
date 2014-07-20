@@ -10,14 +10,14 @@
  * @return {Number}
  */
 Vector.prototype.dot = function(vector) {
-  if (this._dim !== vector._dim) {
+  if (this.size !== vector.size) {
     _throwError('Vector dot product requires vectors to have same size');
   }
 
   var a = 0;
 
-  for (var i=0; i<this._dim; ++i) {
-    a += this._data[i] * vector._data[i];
+  for (var i=0; i<this.size; ++i) {
+    a += this.data[i] * vector.data[i];
   }
 
   return a;
@@ -31,14 +31,14 @@ Vector.prototype.dot = function(vector) {
  * @return {Vector} new vector
  */
 Vector.prototype.minus = function(vector) {
-  if (this._dim !== vector._dim) {
+  if (this.size !== vector.size) {
     _throwError('Vector subtraction requires vectors to have same size');
   }
 
-  var a = new Array(this._dim);
+  var a = new Array(this.size);
 
-  for (var i=0; i<this._dim; ++i) {
-    a[i] = this._data[i] - vector._data[i];
+  for (var i=0; i<this.size; ++i) {
+    a[i] = this.data[i] - vector.data[i];
   }
 
   return new Vector(a);
@@ -52,12 +52,12 @@ Vector.prototype.minus = function(vector) {
  * @return this
  */
 Vector.prototype.minusP = function(vector) {
-  if (this._dim !== vector._dim) {
+  if (this.size !== vector.size) {
     _throwError('Vector subtraction requires vectors to have same size');
   }
 
-  for (var i=0; i<this._dim; ++i) {
-    this._data[i] = this._data[i] - vector._data[i];
+  for (var i=0; i<this.size; ++i) {
+    this.data[i] = this.data[i] - vector.data[i];
   }        
 
   return this;
@@ -73,14 +73,14 @@ Vector.prototype.minusP = function(vector) {
  * @return {Vector} new vector
  */
 Vector.prototype.plus = function(vector) {
-  if (this._dim !== vector._dim) {
+  if (this.size !== vector.size) {
     _throwError('Vector addition requires vectors to have same size');
   }
 
-  var a = new Array(this._dim);
+  var a = new Array(this.size);
 
-  for (var i=0; i<this._dim; ++i) {
-    a[i] = this._data[i] + vector._data[i];
+  for (var i=0; i<this.size; ++i) {
+    a[i] = this.data[i] + vector.data[i];
   }
 
   return new Vector(a);
@@ -95,12 +95,12 @@ Vector.prototype.plus = function(vector) {
  * @return this
  */
 Vector.prototype.plusP = function(vector) {
-  if (this._dim !== vector._dim) {
+  if (this.size !== vector.size) {
     _throwError('Vector addition requires vectors to have same size');
   }
 
-  for (var i=0; i<this._dim; ++i) {
-    this._data[i] = this._data[i] + vector._data[i];
+  for (var i=0; i<this.size; ++i) {
+    this.data[i] = this.data[i] + vector.data[i];
   }
 
   return this;

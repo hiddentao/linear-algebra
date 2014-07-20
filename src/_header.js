@@ -23,23 +23,6 @@
 
 
   /**
-   * OOP inheritance.
-   * @param  {Class} ctor      child
-   * @param  {Class} superCtor parent
-   */
-  var _inherits = function (ctor, superCtor) {
-    ctor.super_ = superCtor;
-    ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-            value: ctor,
-            enumerable: false
-        }
-    });
-  };
-
-
-
-  /**
    * Initialise the linear algebra library.
    *
    * @param {Object} options Additional options.
