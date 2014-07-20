@@ -374,6 +374,16 @@ Vector.prototype.plusP = function(vector) {
 
 
 
+
+/**
+ * Get the sum of this vector's components.
+ * @return Number
+ */
+Vector.prototype.sum = function() {
+  return adder(this.data);
+};
+
+
 /**
  * @fileOverview  Additional matrix operations for high precision version.
  */

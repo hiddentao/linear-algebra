@@ -137,7 +137,7 @@ module.exports = function(linAlg, options) {
         v1dot2.should.eql(v2dot1);
         v1dot2.should.eql(4.4 + 0.4);
       }
-    },
+    }
   };
 
 

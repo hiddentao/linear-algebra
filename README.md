@@ -50,6 +50,10 @@ console.log( v.isVector );   // true
 console.log( v.size );     // 3
 console.log( v.data );     // [1, 2, 3]
 
+// Sum
+v = new Vector( [1, 2, 3] );
+console.log(v.sum());     // 6
+
 // Scaling
 v = new Vector( [1, 2, 3] );
 var vScaled = v.scale(2);

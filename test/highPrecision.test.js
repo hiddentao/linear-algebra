@@ -10,6 +10,9 @@ chai.use(require('sinon-chai'));
 var linAlg = require('../dist/linear-algebra.precision.min');
 
 
+var precisionAdder = require('add');
+
+
 var test = module.exports = {
   beforeEach: function() {
     this.mocker = sinon.sandbox.create();
@@ -20,11 +23,13 @@ var test = module.exports = {
 };
 
 
-var subTests = require('./_commonTests')(linAlg, {
-  add: require('add')
+
+var subTest = require('./_commonTests')(linAlg, {
+  add: precisionAdder
 });
 
-subTests['custom adder'] = function() {
+
+subTest['custom adder'] = function() {
   // dummy adder skips every other value and then adds 0.5 to result
   var adder = function(floats) {
     var ret = 0;
@@ -46,5 +51,12 @@ subTests['custom adder'] = function() {
 
 
 
-test['high precision'] = subTests;
+subTest['Vector']['sum'] = function() {
+  var v = new this.Vector([1.1, 2, 3.2]);
+
+  v.sum().should.eql(precisionAdder([1.1, 2, 3.2]));
+}
+
+
+test['high precision'] = subTest;
 
