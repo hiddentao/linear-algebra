@@ -66,6 +66,24 @@ Vector.prototype.scaleP = function(scale) {
 
 
 
+/**
+ * Create a zero-vector.
+ * @param  {Integer} size Length of vector.
+ * @return {Vector}
+ */
+Vector.zero = function(size) {
+  var a = new Array(size);
+
+  for (var i=0; i<size; ++i) {
+    a[i] = 0;
+  }
+
+  return new Vector(a);
+};  
+
+
+
+
 
 
 // ------------------------------

@@ -95,6 +95,15 @@ var prod = v1.dot(v2);
 console.log(prod);   // 8.1
 ```
 
+The `Vector` class provides static helper methods for creating specific types of vectors:
+
+```javascript
+// Create a zero-vector
+var v = Vector.zero(3);
+console.log(m.data);      // [ 0, 0, 0 ]
+```
+
+
 ### Matrices
 
 ```javascript
@@ -139,7 +148,7 @@ var prod = m.dot(1, v); // 1 = second row
 console.log( prod );  // -38
 ```
 
-The `Matrix` class provides a few static helper methods for creating specific types of matrices:
+The `Matrix` class provides static helper methods for creating specific types of matrices:
 
 ```javascript
 // Create a scalar (diagonal) matrix
