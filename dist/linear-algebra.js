@@ -494,6 +494,61 @@ Matrix.prototype.mul = function(arg) {
 
 
 
+
+/**
+ * Add each value from given array to each column in this matrix.
+ * 
+ * @param  {Vector} vector Array with same length as matrix columns.
+ * 
+ * @return {Matrix} New instance.
+ */
+Matrix.prototype.plusCols = function(vector) {
+  if (this.cols !== vector.size) {
+    _throwError('Vector length must equal no. of columns');
+  }
+
+  var a = new Array(this.rows);
+
+  for (var i=0; i<this.rows; ++i) {
+    a[i] = new Array(this.cols);
+
+    for (var j=0; j<this.cols; ++j) {
+      a[i][j] = this.data[i][j] + vector.data[j];
+    }
+  } 
+
+  return new Matrix(a); 
+};
+
+
+
+
+/**
+ * Add each value from given array to each column in this matrix.
+ * 
+ * @param  {Vector} vector Array with same length as matrix columns.
+ * 
+ * @return {this}
+ */
+Matrix.prototype.plusColsP = function(vector) {
+  if (this.cols !== vector.size) {
+    _throwError('Vector length must equal no. of columns');
+  }
+
+  for (var i=0; i<this.rows; ++i) {
+    for (var j=0; j<this.cols; ++j) {
+      this.data[i][j] += vector.data[j];
+    }
+  } 
+
+  return this;
+};
+
+
+
+
+
+
     return LinAlg;
   };
 });

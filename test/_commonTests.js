@@ -263,6 +263,50 @@ module.exports = function(linAlg, options) {
         }
       }
     },
+    'plus columns': {
+      'wrong size': function() {
+        var a = [ [1,2], [3,4], [5,6] ];
+        var m = new this.Matrix(a);
+
+        var v = new this.Vector([1,2, 3]);
+
+        expect(function() {
+          m.plusCols(v);
+        }).to.throw('Vector length must equal no. of columns');
+      },
+      'right size': function() {
+        var a = [ [1,2], [3,4], [5,6] ];
+        var m = new this.Matrix(a);
+
+        var v = new this.Vector([2, 3.1]);
+
+        var m2 = m.plusCols(v);
+        m2.should.not.eql(m);
+        m2.data.should.eql([ [3,5.1], [5,7.1], [7,9.1] ]);
+      }
+    },
+    'plus columns in-place': {
+      'wrong size': function() {
+        var a = [ [1,2], [3,4], [5,6] ];
+        var m = new this.Matrix(a);
+
+        var v = new this.Vector([1,2, 3]);
+
+        expect(function() {
+          m.plusColsP(v);
+        }).to.throw('Vector length must equal no. of columns');
+      },
+      'right size': function() {
+        var a = [ [1,2], [3,4], [5,6] ];
+        var m = new this.Matrix(a);
+
+        var v = new this.Vector([2, 3.1]);
+
+        var m2 = m.plusColsP(v);
+        m2.should.eql(m);
+        m.data.should.eql([ [3,5.1], [5,7.1], [7,9.1] ]);
+      }
+    },
     'scalar': function() {
       var m1 = this.Matrix.scalar(3, 1.2);
 

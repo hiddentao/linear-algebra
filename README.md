@@ -146,6 +146,18 @@ var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
 var v = new Vector( [ -1, -2, -4] );
 var prod = m.dot(1, v); // 1 = second row 
 console.log( prod );  // -38
+
+// Add a vector to all columns
+m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
+v = new Vector( [ -1, -2, -4] );
+m2 = m.plusCols(v);
+console.log( m2.data );  // [ [0, 0, -1], [3, 3, 2] ]
+
+// Add a vector to all columns in-place
+m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
+v = new Vector( [ -1, -2, -4] );
+m.plusColsP(v);
+console.log( m.data );  // [ [0, 0, -1], [3, 3, 2] ]
 ```
 
 The `Matrix` class provides static helper methods for creating specific types of matrices:
