@@ -6,37 +6,27 @@
 
 
 /**
- * Multiply each element with its corresponding element in matrix.
- * 
- * @param  {Matrix} arg A Matrix.
- * 
- * @return this
+ * Transpose this matrix.
+ * @return {Matrix}
  */
-Matrix.prototype.mulEach = function(op2) {
+Matrix.prototype.trans = function() {
   var thisData = this.data,
     rows = this.rows, 
-    cols = this.cols,
-    op2Data = op2.data,
-    rows2 = op2.rows,
-    cols2 = op2.cols;
-
-  if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('mulEach', this, op2);
-  }
-
-  // op1 = m x n
-  // op2 = m x n
-  // op1 * op2 => m x n
+    cols = this.cols;
 
   var row, col;
 
-  for (row=0; row<rows; ++row) {
-    for (col=0; col<cols; ++col) {
-      thisData[row][col] *= op2Data[row][col];
-    }
-  }  
+  var result = new Array(cols);
 
-  return this;
+  for (col=0; col<cols; ++col) {
+    result[col] = new Array(rows);
+    
+    for (row=0; row<rows; ++row) {
+      result[col][row] = thisData[row][col];
+    }
+  }
+
+  return new Matrix(result);
 };
 
 
@@ -45,31 +35,57 @@ Matrix.prototype.mulEach = function(op2) {
 
 
 /**
- * Subtract each value of given matrix from this matrix.
- * 
- * @param  {Matrix} op2 Matrix to subtract from this one.
- * 
+ * In-place version of trans().
  * @return this
  */
-Matrix.prototype.minusEach = function(op2) {
+Matrix.prototype.trans_ = function() {
   var thisData = this.data,
     rows = this.rows, 
-    cols = this.cols,
-    op2Data = op2.data,
-    rows2 = op2.rows,
-    cols2 = op2.cols;
+    cols = this.cols;
 
-  if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('minusEach', this, op2);
+  var row, col, t;
+
+  // first we transpose the matrix upto length of shortest side
+  var isSquare = (cols === rows);
+  var shortestSide = (cols > rows) ? rows : cols;
+
+  for (row=0; row<shortestSide; ++row) {
+    for (col=row + 1; col<shortestSide; ++col) {
+      t = thisData[col][row];
+      thisData[col][row] = thisData[row][col];
+      thisData[row][col] = t;
+    }
   }
 
-  var row, col;
+  // now we transpose the rest of the matrix
+  if (!isSquare) {
+    if (cols > rows) {
+      // do a column at a time
+      for (col=rows; cols > col; ++col) {
+        if (!Array.isArray(thisData[col])) {
+          thisData[col] = new Array(rows);
+        }
 
-  for (row=0; row<rows; ++row) {
-    for (col=0; col<cols; ++col) {
-      thisData[row][col] -= op2Data[row][col];
+        for (row=0; row<rows; ++row) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
     }
-  }  
+    else {
+      // do a row at a time
+      for (row=cols; rows > row; ++row) {
+        for (col=0; cols > col; ++col) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
+    }
+    
+    // finally, we update the "official" dimensions
+    t = rows;
+    this.rows = cols;
+    this.cols = t;
+  }
+
 
   return this;
 };
@@ -77,39 +93,9 @@ Matrix.prototype.minusEach = function(op2) {
 
 
 
-
-/**
- * Add each value of given matrix to this matrix.
- * 
- * @param  {Matrix} op2 Matrix to add to this one.
- * 
- * @return this
- */
-Matrix.prototype.plusEach = function(op2) {
-  var thisData = this.data,
-    rows = this.rows, 
-    cols = this.cols,
-    op2Data = op2.data,
-    rows2 = op2.rows,
-    cols2 = op2.cols;
-
-  if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('plusEach', this, op2);
-  }
-
-  var row, col;
-
-  for (row=0; row<rows; ++row) {
-    for (col=0; col<cols; ++col) {
-      thisData[row][col] += op2Data[row][col];
-    }
-  }  
-
-  return this;
-};
-
-
-
+BUILD(ALGEBRA_OP, mulEach, thisData[row][col] * op2Data[row][col])
+BUILD(ALGEBRA_OP, plusEach, thisData[row][col] + op2Data[row][col])
+BUILD(ALGEBRA_OP, minusEach, thisData[row][col] - op2Data[row][col])
 
 
 

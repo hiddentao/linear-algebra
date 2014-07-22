@@ -41,6 +41,8 @@
     "sinon": "~1.10.2",
     "sinon-chai": "~2.5.0",
     "add": "~2.0.6",
-    "gulp-bench": "~1.0.3"
+    "gulp-bench": "~1.0.3",
+    "gulp-replace": "~0.4.0",
+    "coffee-script": "~1.7.1"
   }
 }
