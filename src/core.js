@@ -7,194 +7,113 @@
 var LinAlg = {};
 
 
-
-
-// ------------------------------
-// Vectors
-// ------------------------------
-
-
-/** 
- * Construct a vector.
+/**
+ * Our common number array class.
  *
- * @param {Array} data Array of values representing vector.
+ * @param {Array} values 1D array (vector) or 2D array (matrix) with length >= 1.
  * 
  * @constructor
  */
-var Vector = LinAlg.Vector = function(data) {
-  this.data = data;
-  this.size = data.length;
-};
-
-
-/**
- * Is this a vector?
- */
-Object.defineProperty(Vector.prototype, 'isVector', { value: true } );
-
-
-
-/**
- * Scale this vector.
- * @param  {Number} scale Scaling factor.
- * @return {Vector} new vector
- */
-Vector.prototype.scale = function(scale) {
-  var a = new Array(this.size);
-
-  for (var i = 0; i<this.size; ++i) {
-    a[i] = this.data[i] * scale;
+var Matrix = LinAlg.Matrix = function(values) {
+  if (Array.isArray(values[0])) {
+    // matrix
+    this.data = values;
+    this.rows = this.data.length;
+    this.cols = this.data[0];
+  } else {
+    // row-vector
+    this.data = [values];
+    this.rows = this.data[0];
+    this.cols = values.length;
   }
-
-  return new Vector(a);
-};
-
-
-
-/**
- * Scale this vector in-place.
- * @param  {Number} scale Scaling factor.
- * @return this
- */
-Vector.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this.size; ++i) {
-    this.data[i] *= scale;
-  }
-  return this;
 };
 
 
 
 
 /**
- * Create a zero-vector.
- * @param  {Integer} size Length of vector.
- * @return {Vector}
- */
-Vector.zero = function(size) {
-  var a = new Array(size);
-
-  for (var i=0; i<size; ++i) {
-    a[i] = 0;
-  }
-
-  return new Vector(a);
-};  
-
-
-
-
-
-
-// ------------------------------
-// Matrices
-// ------------------------------
-
-
-
-/** 
- * Construct a matrix.
- *
- * @param {Arrya} data Array of arrays representing matrix.
- * 
- * @constructor
- */
-var Matrix = LinAlg.Matrix = function(data) {
-  this.data = data;
-  this.rows = data.length;
-  this.cols = data[0].length;
-  this.size = [this.rows, this.cols];
-};
-
-
-
-/**
- * Is this a matrix?
- */
-Object.defineProperty(Matrix.prototype, 'isMatrix', { value: true });
-
-
-
-/**
- * Scale this matrix
- * @param  {Number} scale Scaling factor.
- * @return {Matrix} new matrix.
- */
-Matrix.prototype.scale = function(scale) {
-  var a = new Array(this.rows);
-
-  for (var i = 0; i<this.rows; ++i) {
-    a[i] = new Array(this.cols);
-
-    for (var j = 0; j<this.cols; ++j) {
-      a[i][j] = this.data[i][j] * scale;
-    }
-  }
-
-  return new Matrix(a);
-};
-
-
-
-
-/**
- * Scale this matrix
- * @param  {Number} scale Scaling factor.
- * @return {Matrix} new matrix.
- */
-Matrix.prototype.scale = function(scale) {
-  var a = new Array(this.rows);
-
-  for (var i = 0; i<this.rows; ++i) {
-    a[i] = new Array(this.cols);
-
-    for (var j = 0; j<this.cols; ++j) {
-      a[i][j] = this.data[i][j] * scale;
-    }
-  }
-
-  return new Matrix(a);
-};
-
-
-
-/**
- * Scale this matrix in-place
- * @param  {Number} scale Scaling factor.
- * @return this
- */
-Matrix.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this.rows; ++i) {
-    for (var j = 0; j<this.cols; ++j) {
-      this.data[i][j] *= scale;
-    }
-  }
-
-  return this;
-};
-
-
-
-
-
-/**
- * Get transpose of this matrix.
+ * Clone this matrix.
  * @return {Matrix}
  */
-Matrix.prototype.transpose = function() {
-  var result = new Array(this.cols),
-    i, j;
+Matrix.prototype.clone = function() {
+  var thisData = this.data,
+    rows = this.rows;
 
-  for (j=0; j<this.cols; ++j) {
-    result[j] = new Array(this.rows);
+  var a = new Array(rows);
 
-    for (i=0; i<this.rows; ++i) {
-      result[j][i] = this.data[i][j];
+  for (var i = 0; i<rows; ++i) {
+    a[i] = thisData[i].slice(0);
+  }
+
+  return new Matrix(a);
+};
+
+
+
+
+
+
+
+
+
+/**
+ * Transpose this matrix.
+ * @return this
+ */
+Matrix.prototype.trans = function() {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols;
+
+  var row, col, t;
+
+  // first we transpose the matrix upto length of shortest side
+  var isSquare = (cols === rows);
+  var shortestSide = (cols > rows) ? rows : cols;
+
+  for (row=0; row<shortestSide; ++row) {
+    for (col=row + 1; col<shortestSide; ++col) {
+      t = thisData[col][row];
+      thisData[col][row] = thisData[row][col];
+      thisData[row][col] = t;
     }
   }
 
-  return new Matrix(result);
-}
+  // now we transpose the rest of the matrix
+  if (!isSquare) {
+    if (cols > rows) {
+      // do a column at a time
+      for (col=rows; cols > col; ++col) {
+        if (!Array.isArray(thisData[col])) {
+          thisData[col] = new Array(rows);
+        }
+
+        for (row=0; row<rows; ++row) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
+    }
+    else {
+      // do a row at a time
+      for (row=cols; rows > row; ++row) {
+        for (col=0; cols > col; ++col) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
+    }
+    
+    // finally, we update the "official" dimensions
+    t = rows;
+    this.rows = cols;
+    this.cols = t;
+  }
+
+
+  return this;
+};
+
+
+
 
 
 
@@ -206,7 +125,8 @@ Matrix.prototype.transpose = function() {
  */
 Matrix.identity = function(dim) {
   return Matrix.scalar(dim, 1);
-};  
+};
+
 
 
 
@@ -232,4 +152,32 @@ Matrix.scalar = function(dim, entry) {
 
   return new Matrix(a);
 };
+
+
+
+
+/**
+ * Helpers to create vectors, i.e. matrices with a single row.
+ */
+var Vector = LinAlg.Vector = {
+  /**
+   * Create a row-vector of zeros.
+   * @param  {Integer} size Length of vector.
+   * @return {Vector}
+   */
+  zero: function(size) {
+    var a = new Array(size);
+
+    for (var i=0; i<size; ++i) {
+      a[i] = 0;
+    }
+
+    return new Matrix(a);    
+  }
+};
+
+
+
+
+
 

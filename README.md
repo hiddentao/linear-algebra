@@ -8,9 +8,9 @@ This is a low-level algebra library which supports basic vector and matrix opera
 
 Features:
 
-* Objects are just thin wrappers around arrays for max. performance.
-* Can perform basic arithmetic in-place for more efficiency.
-* Enhanced [floating point precision](#higher-precision)
+* Simple, expressive API inspired by [Octave](https://www.gnu.org/software/octave/).
+* Array implementation with [performance optimizations](#performance).
+* Enhanced [floating point precision](#higher-precision) when needed
 * Comprehensive unit tests.
 * Works in node.js and in browsers.
 * Has no other dependencies.
@@ -41,6 +41,8 @@ var linearAlgebra = require('linear-algebra')(),     // initialise it
     Vector = linearAlgebra.Vector,
     Matrix = linearAlgebra.Matrix;
 ```
+
+The `Vector` objects simply contain helpers to create single-row `Matrix` objects. Using a single representation for both vectors and matrices both simplifies the implementation and makes it easier to optimize for [performance](#performance).
 
 ### Vectors
 
@@ -209,6 +211,15 @@ var linAlg = linearAlgebra({
 ```
 
 ## Performance
+
+To maximize performance we keep in mind the following principle:
+
+* Overwriting an existing array is twice as fast as creating a new one - [stats](http://jsperf.com/create-new-array-vs-overwrite-existing).
+
+We try to minimize the number of times we do `new Array` when performing calculations by re-using old arrays:
+
+
+
 
 To run the performance benchmarks:
 

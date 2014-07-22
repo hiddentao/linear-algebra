@@ -15,8 +15,10 @@ gulp.task('build-lib', function() {
       './src/_header.js',
       './src/options.js',
       './src/core.js',
-      './src/vector.js',
-      './src/matrix.js',
+      './src/algebra.js',
+      './src/algebra-extra.js',
+      './src/calculations.js',
+      './src/math-transforms.js',
       './src/_footer.js'
     ] )
     .pipe( concat('linear-algebra.js') )
@@ -30,8 +32,10 @@ gulp.task('build-precision-lib', function() {
       './src/_header.js',
       './src/options.precision.js',
       './src/core.js',
-      './src/vector.precision.js',
-      './src/matrix.precision.js',
+      './src/algebra.js',
+      './src/algebra-extra.precision.js',
+      './src/calculations.precision.js',
+      './src/math-transforms.js',
       './src/_footer.js'
     ] )
     .pipe( concat('linear-algebra.precision.js') )

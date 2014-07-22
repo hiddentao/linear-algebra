@@ -22,6 +22,12 @@
   };
 
 
+  var _throwSizeMismatchError = function(op, arg1, arg2) {
+    _throwError(op + ': op1 is ' + arg1.rows  + ' * ' + arg1.cols + 
+      ' and op2 is ' + arg2.rows + ' * ' + arg2.cols);
+  };
+
+
   /**
    * Initialise the linear algebra library.
    *

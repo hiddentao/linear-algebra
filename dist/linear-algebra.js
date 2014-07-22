@@ -22,6 +22,12 @@
   };
 
 
+  var _throwSizeMismatchError = function(op, arg1, arg2) {
+    _throwError(op + ': op1 is ' + arg1.rows  + ' * ' + arg1.cols + 
+      ' and op2 is ' + arg2.rows + ' * ' + arg2.cols);
+  };
+
+
   /**
    * Initialise the linear algebra library.
    *
@@ -53,194 +59,113 @@ if (options.add) {
 var LinAlg = {};
 
 
-
-
-// ------------------------------
-// Vectors
-// ------------------------------
-
-
-/** 
- * Construct a vector.
+/**
+ * Our common number array class.
  *
- * @param {Array} data Array of values representing vector.
+ * @param {Array} values 1D array (vector) or 2D array (matrix) with length >= 1.
  * 
  * @constructor
  */
-var Vector = LinAlg.Vector = function(data) {
-  this.data = data;
-  this.size = data.length;
-};
-
-
-/**
- * Is this a vector?
- */
-Object.defineProperty(Vector.prototype, 'isVector', { value: true } );
-
-
-
-/**
- * Scale this vector.
- * @param  {Number} scale Scaling factor.
- * @return {Vector} new vector
- */
-Vector.prototype.scale = function(scale) {
-  var a = new Array(this.size);
-
-  for (var i = 0; i<this.size; ++i) {
-    a[i] = this.data[i] * scale;
+var Matrix = LinAlg.Matrix = function(values) {
+  if (Array.isArray(values[0])) {
+    // matrix
+    this.data = values;
+    this.rows = this.data.length;
+    this.cols = this.data[0];
+  } else {
+    // row-vector
+    this.data = [values];
+    this.rows = this.data[0];
+    this.cols = values.length;
   }
-
-  return new Vector(a);
-};
-
-
-
-/**
- * Scale this vector in-place.
- * @param  {Number} scale Scaling factor.
- * @return this
- */
-Vector.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this.size; ++i) {
-    this.data[i] *= scale;
-  }
-  return this;
 };
 
 
 
 
 /**
- * Create a zero-vector.
- * @param  {Integer} size Length of vector.
- * @return {Vector}
- */
-Vector.zero = function(size) {
-  var a = new Array(size);
-
-  for (var i=0; i<size; ++i) {
-    a[i] = 0;
-  }
-
-  return new Vector(a);
-};  
-
-
-
-
-
-
-// ------------------------------
-// Matrices
-// ------------------------------
-
-
-
-/** 
- * Construct a matrix.
- *
- * @param {Arrya} data Array of arrays representing matrix.
- * 
- * @constructor
- */
-var Matrix = LinAlg.Matrix = function(data) {
-  this.data = data;
-  this.rows = data.length;
-  this.cols = data[0].length;
-  this.size = [this.rows, this.cols];
-};
-
-
-
-/**
- * Is this a matrix?
- */
-Object.defineProperty(Matrix.prototype, 'isMatrix', { value: true });
-
-
-
-/**
- * Scale this matrix
- * @param  {Number} scale Scaling factor.
- * @return {Matrix} new matrix.
- */
-Matrix.prototype.scale = function(scale) {
-  var a = new Array(this.rows);
-
-  for (var i = 0; i<this.rows; ++i) {
-    a[i] = new Array(this.cols);
-
-    for (var j = 0; j<this.cols; ++j) {
-      a[i][j] = this.data[i][j] * scale;
-    }
-  }
-
-  return new Matrix(a);
-};
-
-
-
-
-/**
- * Scale this matrix
- * @param  {Number} scale Scaling factor.
- * @return {Matrix} new matrix.
- */
-Matrix.prototype.scale = function(scale) {
-  var a = new Array(this.rows);
-
-  for (var i = 0; i<this.rows; ++i) {
-    a[i] = new Array(this.cols);
-
-    for (var j = 0; j<this.cols; ++j) {
-      a[i][j] = this.data[i][j] * scale;
-    }
-  }
-
-  return new Matrix(a);
-};
-
-
-
-/**
- * Scale this matrix in-place
- * @param  {Number} scale Scaling factor.
- * @return this
- */
-Matrix.prototype.scaleP = function(scale) {
-  for (var i = 0; i<this.rows; ++i) {
-    for (var j = 0; j<this.cols; ++j) {
-      this.data[i][j] *= scale;
-    }
-  }
-
-  return this;
-};
-
-
-
-
-
-/**
- * Get transpose of this matrix.
+ * Clone this matrix.
  * @return {Matrix}
  */
-Matrix.prototype.transpose = function() {
-  var result = new Array(this.cols),
-    i, j;
+Matrix.prototype.clone = function() {
+  var thisData = this.data,
+    rows = this.rows;
 
-  for (j=0; j<this.cols; ++j) {
-    result[j] = new Array(this.rows);
+  var a = new Array(rows);
 
-    for (i=0; i<this.rows; ++i) {
-      result[j][i] = this.data[i][j];
+  for (var i = 0; i<rows; ++i) {
+    a[i] = thisData[i].slice(0);
+  }
+
+  return new Matrix(a);
+};
+
+
+
+
+
+
+
+
+
+/**
+ * Transpose this matrix.
+ * @return this
+ */
+Matrix.prototype.trans = function() {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols;
+
+  var row, col, t;
+
+  // first we transpose the matrix upto length of shortest side
+  var isSquare = (cols === rows);
+  var shortestSide = (cols > rows) ? rows : cols;
+
+  for (row=0; row<shortestSide; ++row) {
+    for (col=row + 1; col<shortestSide; ++col) {
+      t = thisData[col][row];
+      thisData[col][row] = thisData[row][col];
+      thisData[row][col] = t;
     }
   }
 
-  return new Matrix(result);
-}
+  // now we transpose the rest of the matrix
+  if (!isSquare) {
+    if (cols > rows) {
+      // do a column at a time
+      for (col=rows; cols > col; ++col) {
+        if (!Array.isArray(thisData[col])) {
+          thisData[col] = new Array(rows);
+        }
+
+        for (row=0; row<rows; ++row) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
+    }
+    else {
+      // do a row at a time
+      for (row=cols; rows > row; ++row) {
+        for (col=0; cols > col; ++col) {
+          thisData[col][row] = thisData[row][col];
+        }
+      }
+    }
+    
+    // finally, we update the "official" dimensions
+    t = rows;
+    this.rows = cols;
+    this.cols = t;
+  }
+
+
+  return this;
+};
+
+
+
 
 
 
@@ -252,7 +177,8 @@ Matrix.prototype.transpose = function() {
  */
 Matrix.identity = function(dim) {
   return Matrix.scalar(dim, 1);
-};  
+};
+
 
 
 
@@ -280,268 +206,342 @@ Matrix.scalar = function(dim, entry) {
 };
 
 
+
+
 /**
- * @fileOverview  Additional vector operations
+ * Helpers to create vectors, i.e. matrices with a single row.
+ */
+var Vector = LinAlg.Vector = {
+  /**
+   * Create a row-vector of zeros.
+   * @param  {Integer} size Length of vector.
+   * @return {Vector}
+   */
+  zero: function(size) {
+    var a = new Array(size);
+
+    for (var i=0; i<size; ++i) {
+      a[i] = 0;
+    }
+
+    return new Matrix(a);    
+  }
+};
+
+
+
+
+
+
+
+/**
+ * @fileOverview  Basic arithmetic operations
  */
 
 
 
+
 /**
- * Compute dot product of this vector with another one.
- * @param  {Vector} vector.
+ * Multiply each element with its corresponding element in matrix.
+ * 
+ * @param  {Matrix} arg A Matrix.
+ * 
+ * @return this
+ */
+Matrix.prototype.mulEach = function(op2) {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols,
+    op2Data = op2.data,
+    rows2 = op2.rows,
+    cols2 = op2.cols;
+
+  if (rows !== rows2 || cols !== cols2) {
+    _throwSizeMismatchError('mulEach', this, op2);
+  }
+
+  // op1 = m x n
+  // op2 = m x n
+  // op1 * op2 => m x n
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] *= op2Data[row][col];
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
+
+/**
+ * Subtract each value of given matrix from this matrix.
+ * 
+ * @param  {Matrix} op2 Matrix to subtract from this one.
+ * 
+ * @return this
+ */
+Matrix.prototype.minusEach = function(op2) {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols,
+    op2Data = op2.data,
+    rows2 = op2.rows,
+    cols2 = op2.cols;
+
+  if (rows !== rows2 || cols !== cols2) {
+    _throwSizeMismatchError('minusEach', this, op2);
+  }
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] -= op2Data[row][col];
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
+/**
+ * Add each value of given matrix to this matrix.
+ * 
+ * @param  {Matrix} op2 Matrix to add to this one.
+ * 
+ * @return this
+ */
+Matrix.prototype.plusEach = function(op2) {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols,
+    op2Data = op2.data,
+    rows2 = op2.rows,
+    cols2 = op2.cols;
+
+  if (rows !== rows2 || cols !== cols2) {
+    _throwSizeMismatchError('plusEach', this, op2);
+  }
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] += op2Data[row][col];
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
+
+
+
+
+/**
+ * Dot-product - multiply with given matrix.
+ * 
+ * @param  {Matrix} arg A Matrix.
+ * 
+ * @return this
+ */
+Matrix.prototype.dot = function(op2) {
+  var thisData = this.data,
+    rows = this.rows, 
+    cols = this.cols,
+    op2Data = op2.data,
+    rows2 = op2.rows,
+    cols2 = op2.cols;
+
+  if (cols !== rows2) {
+    _throwSizeMismatchError('dot', this, op2);
+  }
+
+  // op1 = m x n
+  // op2 = m2 x n2
+  // op1 * op2 => m x n2
+
+  var row, row2, col, tmp;
+
+  for (row=0; row<rows; ++row) {
+    // we need to keep a copy of this row since we'll be overwriting it in this.data
+    tmp = thisData[row].slice(0, cols);
+
+    for (col=0; col<cols2; ++col) {
+      thisData[row][col] = 0;
+
+      for (row2=0; row2<rows2; ++row2) {
+        thisData[row][col] += tmp[col] * op2[row2][col];
+      }
+    }
+  }  
+
+  // update dimensions
+  this.cols = cols2;
+
+  return this;
+};
+
+
+
+
+/**
+ * Sum every element.
  * @return {Number}
  */
-Vector.prototype.dot = function(vector) {
-  if (this.size !== vector.size) {
-    _throwError('Vector dot product requires vectors to have same size');
-  }
+Matrix.prototype.getSum = function(value) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
 
-  var a = 0;
-
-  for (var i=0; i<this.size; ++i) {
-    a += this.data[i] * vector.data[i];
-  }
-
-  return a;
-};
-
-
-
-/**
- * Subtract another vector from this one.
- * @param  {Vector} vector.
- * @return {Vector} new vector
- */
-Vector.prototype.minus = function(vector) {
-  if (this.size !== vector.size) {
-    _throwError('Vector subtraction requires vectors to have same size');
-  }
-
-  var a = new Array(this.size);
-
-  for (var i=0; i<this.size; ++i) {
-    a[i] = this.data[i] - vector.data[i];
-  }
-
-  return new Vector(a);
-};
-
-
-
-/**
- * Subtract another vector from this one, in-place.
- * @param  {Vector} vector.
- * @return this
- */
-Vector.prototype.minusP = function(vector) {
-  if (this.size !== vector.size) {
-    _throwError('Vector subtraction requires vectors to have same size');
-  }
-
-  for (var i=0; i<this.size; ++i) {
-    this.data[i] = this.data[i] - vector.data[i];
-  }        
-
-  return this;
-};
-
-
-
-
-
-/**
- * Add another vector to this one.
- * @param  {Vector} vector.
- * @return {Vector} new vector
- */
-Vector.prototype.plus = function(vector) {
-  if (this.size !== vector.size) {
-    _throwError('Vector addition requires vectors to have same size');
-  }
-
-  var a = new Array(this.size);
-
-  for (var i=0; i<this.size; ++i) {
-    a[i] = this.data[i] + vector.data[i];
-  }
-
-  return new Vector(a);
-};
-
-
-
-
-/**
- * Add another vector to this one, in-place.
- * @param  {Vector} vector.
- * @return this
- */
-Vector.prototype.plusP = function(vector) {
-  if (this.size !== vector.size) {
-    _throwError('Vector addition requires vectors to have same size');
-  }
-
-  for (var i=0; i<this.size; ++i) {
-    this.data[i] = this.data[i] + vector.data[i];
-  }
-
-  return this;
-};
-
-
-
-/**
- * Get the sum of this vector's components.
- * @return Number
- */
-Vector.prototype.sum = function() {
   var sum = 0;
 
-  for (var i=0; i<this.size; ++i) {
-    sum += this.data[i];
+  for (var i = 0; i<rows; ++i) {
+    for (var j = 0; j<cols; ++j) {
+      sum += thisData[i][j];
+    }
   }
-
-  return sum;
+  
+  return sum; 
 };
 
 
-
-
 /**
- * @fileOverview  Additional matrix operations
+ * Apply mathematical function to all elements in this matrix.
+ *
+ * @param {Function} transformFn With signature (double) => double
+ * 
+ * @return this
  */
+Matrix.prototype.apply = function(transformFn) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
 
+  var row, col;
 
-
-
-
-
-/**
- * Compute dot product of given row with a vector.
- * 
- * @param {Number} rowNum 0-based row index.
- * @param  {Vector} vector.
- * 
- * @return {Number}
- */
-Matrix.prototype.dot = function(rowNum, vector) {
-  if (this.cols !== vector.size) {
-    _throwError('Vector dot product requires this.columns = vector.size');
-  }
-
-  var a = 0;
-
-  for (var j=0; j<this.cols; ++j) {
-    a += this.data[rowNum][j] * vector.data[j];
-  }
-
-  return a;
-};
-
-
-
-
-/**
- * Multiply this matrix by a matrix or vector.
- * @param  {Matrix|Vector} arg Matrix or vector.
- * @return {Matrix|Vector} A Matrix or Vector depending on the result.
- */
-Matrix.prototype.mul = function(arg) {
-  var result, i, j, k;
-
-  // matrix
-  if (arg.isMatrix) {
-    if (this.cols !== arg.rows) {
-      _throwError('Multiplying by matrix requires this.columns = matrix.rows');
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = transformFn(thisData[row][col]);
     }
-
-    result = new Array(this.rows);
-
-    for (i=0; i<this.rows; ++i) {
-      result[i] = new Array(arg.cols);
-
-      for (k=0; k<arg.cols; ++k) {
-        result[i][k] = 0;
-
-        for (j=0; j<this.cols; ++j) {
-          result[i][k] += this.data[i][j] * arg.data[j][k];
-        }
-      }
-    }
-
-    return new Matrix(result);
-  }
-  // vector
-  else if (arg.isVector) {
-    if (this.cols !== arg.size) {
-      _throwError('Multiplying by vector requires this.columns = vector.size');
-    }
-
-    result = new Array(this.rows);
-
-    for (i=0; i<this.rows; ++i) {
-      result[i] = 0;
-
-      for (j=0; j<this.cols; ++j) {
-        // store values to add in temporary array
-        result[i] += this.data[i][j] * arg.data[j];
-      }
-    }
-
-    return new Vector(result);
-  }
-};
-
-
-
-
-/**
- * Add each value from given array to each column in this matrix.
- * 
- * @param  {Vector} vector Array with same length as matrix columns.
- * 
- * @return {Matrix} New instance.
- */
-Matrix.prototype.plusCols = function(vector) {
-  if (this.cols !== vector.size) {
-    _throwError('Vector length must equal no. of columns');
-  }
-
-  var a = new Array(this.rows);
-
-  for (var i=0; i<this.rows; ++i) {
-    a[i] = new Array(this.cols);
-
-    for (var j=0; j<this.cols; ++j) {
-      a[i][j] = this.data[i][j] + vector.data[j];
-    }
-  } 
-
-  return new Matrix(a); 
-};
-
-
-
-
-/**
- * Add each value from given array to each column in this matrix.
- * 
- * @param  {Vector} vector Array with same length as matrix columns.
- * 
- * @return {this}
- */
-Matrix.prototype.plusColsP = function(vector) {
-  if (this.cols !== vector.size) {
-    _throwError('Vector length must equal no. of columns');
-  }
-
-  for (var i=0; i<this.rows; ++i) {
-    for (var j=0; j<this.cols; ++j) {
-      this.data[i][j] += vector.data[j];
-    }
-  } 
+  }  
 
   return this;
+};
+
+
+
+
+/**
+ * Calculate the natural log (ln) all the elements.
+ * 
+ * @return this
+ */
+Matrix.prototype.ln = function() {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = Math.log(thisData[row][col]);
+    }
+  }  
+
+  return this;
+};
+
+
+
+/**
+ * Calculate the sigmoid function of all the elements.
+ *
+ * See http://en.wikipedia.org/wiki/Sigmoid_function
+ * 
+ * @return this
+ */
+Matrix.prototype.sigmoid = function() {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = (1 / (1 + Math.exp(-thisData[row][col])));
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
+
+
+/**
+ * Multiply every element with given value.
+ * @param  {Number} value Value to multiple with.
+ * @return this
+ */
+Matrix.prototype.mul = function(value) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row = 0; row<rows; ++row) {
+    for (col = 0; col<cols; ++col) {
+      thisData[row][col] *= value;
+    }
+  }
+
+  return this; 
+};
+
+
+
+
+
+/**
+ * Add given value to every element.
+ * @param  {Number} value Value to add.
+ * @return this
+ */
+Matrix.prototype.plus = function(value) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row = 0; row<rows; ++row) {
+    for (col = 0; col<cols; ++col) {
+      thisData[row][col] += value;
+    }
+  }
+
+  return this; 
 };
 
 
