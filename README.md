@@ -200,7 +200,7 @@ $ gulp benchmark
 
 As mentioned earlier, matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
 
-The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. However, this may not be true for all the matrix operations contained in this library:
+The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. However, this may not be true for all the matrix operations contained in this library, e.g.:
 
 ```bash
  Starting 'benchmark'...
@@ -212,6 +212,8 @@ The _in-place_ versions are provided because in general, overwriting an existing
 [14:11:01]    Matrix transpose (cols > rows) - default x 1,109,472 ops/sec ±1.99% (94 runs sampled)
 [14:11:07]    Matrix transpose (cols > rows) - in-place x 959,265 ops/sec ±1.13% (97 runs sampled)
 ```
+
+I recommend that you experiment with different methods to see what works best for you.
 
 ## Building
 
