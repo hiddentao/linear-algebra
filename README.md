@@ -57,11 +57,11 @@ The _in-place_ version of a method is named as the original method but with an a
 var m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
 
 // default
-var m2 = m.mul(5);   // multiply every element by 5
+var m2 = m.mulEach(5);   // multiply every element by 5
 m2 === m1;  // false
 
 // in-place
-var m2 = m.mul_(5); // notice the _ suffix
+var m2 = m.mulEach_(5); // notice the _ suffix
 m2 === m1;  // true
 ```
 
