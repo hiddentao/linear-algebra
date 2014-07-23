@@ -8,12 +8,11 @@ This is a low-level algebra library which supports basic vector and matrix opera
 
 Features:
 
-* Simple, expressive API inspired by [Octave](https://www.gnu.org/software/octave/).
+* Simple, expressive API.
 * Array implementation with [performance optimizations](#performance).
-* Enhanced [floating point precision](#higher-precision) when needed
+* Enhanced [floating point precision](#higher-precision) if needed.
 * Comprehensive unit tests.
-* Works in node.js and in browsers.
-* Has no other dependencies.
+* Works in node.js and browsers.
 * Small: ~1 KB minified and gzipped.
 
 ## Installation
@@ -42,139 +41,119 @@ var linearAlgebra = require('linear-algebra')(),     // initialise it
     Matrix = linearAlgebra.Matrix;
 ```
 
-The `Vector` objects simply contain helpers to create single-row `Matrix` objects. Using a single representation for both vectors and matrices both simplifies the implementation and makes it easier to optimize for [performance](#performance).
+Note that both matrices and vectors are represented by `Matrix` instances. The `Vector` object simply contains helpers to create single-row `Matrix` objects.
 
-### Vectors
+### In-place methods
 
-```javascript
-var v = new Vector( [1, 2, 3] );
-console.log( v.isVector );   // true
-console.log( v.size );     // 3
-console.log( v.data );     // [1, 2, 3]
+Matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. In some cases you may obtain better performance if you switch to the in-place version, and vice versa.
 
-// Sum
-v = new Vector( [1, 2, 3] );
-console.log(v.sum());     // 6
+The _in-place_ version of a method is named as the original method but with an additional `_` suffix:
 
-// Scaling
-v = new Vector( [1, 2, 3] );
-var vScaled = v.scale(2);
-console.log(vScaled.data);     // [2, 4, 6]
+```js
+var m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
 
-// Scaling in-place
-v = new Vector( [1, 2, 3] );
-v.scaleP(2);
-console.log(v.data);     // [2, 4, 6]
+// default
+var m2 = m.mul(5);   // multiply every element by 5
+m2 === m1;  // false
 
-// Addition
-var v1 = new Vector( [1, 2, 3]);
-var v2 = new Vector( [0.1, -2, 4] );
-var v3 = v1.plus(v2);
-console.log( v3.data );        // [ 1.1, 0, 7 ]
-
-// Addition in-place
-var v1 = new Vector( [1, 2, 3]);
-var v2 = new Vector( [0.1, -2, 4] );
-v1.plusP(v2);
-console.log( v1.data );        // [ 1.1, 0, 7 ]
-
-// Subtraction
-var v1 = new Vector( [1, 2, 3]);
-var v2 = new Vector( [0.1, -2, 4] );
-var v3 = v1.minus(v2);
-console.log( v3.data );        // [ 0.9, 4, -1 ]
-
-// Subtraction in-place
-var v1 = new Vector( [1, 2, 3]);
-var v2 = new Vector( [0.1, -2, 4] );
-v1.minusP(v2);
-console.log( v1.data );        // [ 0.9, 4, -1 ]
-
-// Dot-product
-v1 = new Vector( [1, 2, 3]);
-v2 = new Vector( [0.1, -2, 4] );
-var prod = v1.dot(v2);
-console.log(prod);   // 8.1
+// in-place
+var m2 = m.mul_(5); // notice the _ suffix
+m2 === m1;  // true
 ```
 
-The `Vector` class provides static helper methods for creating specific types of vectors:
+Using the in-place version of a method may not always yield a performance improvement. You can run the [performance benchmarks](#performance) to see examples of this.
+
+### API
 
 ```javascript
-// Create a zero-vector
-var v = Vector.zero(3);
-console.log(m.data);      // [ 0, 0, 0 ]
-```
+var m, m2, m3;  // variables we'll use below
 
+/* Construction */
 
-### Matrices
-
-```javascript
-var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-console.log( m.isMatrix );   // true
-console.log( m.size );     // [2, 3]
+m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
 console.log( m.rows );     // 2
 console.log( m.cols );     // 3
 console.log( m.data );     // [ [1, 2, 3], [4, 5, 6] ]
 
-// Scaling
-m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-var mScaled = m.scale(2);
-console.log(mScaled.data);     // [ [2, 4, 6], [8, 10, 12] ]
-
-// Scaling in-place
-m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-m.scaleP(2);
-console.log(m.data);     // [ [2, 4, 6], [8, 10, 12] ]
-
-// Transpose
-var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-var mTranspose = m.transpose();
-console.log(mTranspose.data);     // [ [1, 4], [2, 5], [3, 6] ]
-
-// Multiplication with a vector
-var m1 = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-var v1 = new Vector( [1, 2, 3] );
-var m2 = m1.mul(v1);
-console.log(m2.data);     // [13, 32]
-
-// Multiplication with a matrix
-m1 = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-m2 = new Matrix( [ [1, 2], [4, 5], [-3, -6] ] );
-var m3 = m1.mul(m2);
-console.log(m3.data);     // [ [0, -6], [2, -3] ]
-
-// Dot-product of a specific row with a vector
-var m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-var v = new Vector( [ -1, -2, -4] );
-var prod = m.dot(1, v); // 1 = second row 
-console.log( prod );  // -38
-
-// Add a vector to all columns
-m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-v = new Vector( [ -1, -2, -4] );
-m2 = m.plusCols(v);
-console.log( m2.data );  // [ [0, 0, -1], [3, 3, 2] ]
-
-// Add a vector to all columns in-place
-m = new Matrix( [ [1, 2, 3], [4, 5, 6] ] );
-v = new Vector( [ -1, -2, -4] );
-m.plusColsP(v);
-console.log( m.data );  // [ [0, 0, -1], [3, 3, 2] ]
-```
-
-The `Matrix` class provides static helper methods for creating specific types of matrices:
-
-```javascript
-// Create a scalar (diagonal) matrix
-var m = Matrix.scalar(3, 5);
-console.log(m.size);      // 3
-console.log(m.data);      // [ [5, 0, 0], [0, 5, 0], [0, 0, 5] ]
-
-// Create an identity matrix
+// identity matrix
 m = Matrix.identity(3);
-console.log(m.size);      // 3
-console.log(m.data);      // [ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]
+console.log( m.data );     // [ [1,0,0], [0,1,0], [0,0,1] ]
+
+// scalar (diagonal) matrix
+m = Matrix.scalar(3, 9);
+console.log( m.data );     // [ [9,0,0], [0,9,0], [0,0,9] ]
+
+// vector (a 1-row matrix)
+m = Vector.zero(5);
+console.log( m.data );     // [ [0, 0, 0, 0, 0] ]
+
+
+/* Algebra */
+
+// transpose
+m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
+m2 = m.trans();
+console.log(m2.data);    // [ [1, 4], [2, 5], [3, 6] ]
+
+// dot-product
+m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
+m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m3 = m.dot(m2);
+console.log(m3.data);    // [ [22, 28], [49, 64] ]
+
+// multiply corresponding elements
+m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
+m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m3 = m.mulEach(m2);
+console.log(m3.data);    // [ [10, 40], [90, 160], [250, 360] ]
+
+// add corresponding elements
+m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
+m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m3 = m.plusEach(m2);
+console.log(m3.data);    // [ [11, 22], [33, 44], [55, 66] ]
+
+// subtract corresponding elements
+m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
+m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m3 = m.minusEach(m2);
+console.log(m3.data);    // [ [9, 18], [27, 36], [45, 54] ]
+
+
+/* Math functions */
+
+// natural log (Math.log)
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.log();
+console.log(m2.data);    // [ [0.0000, 0.69315], [1.09861, 1.38629], [1.60944   1.79176] ]
+
+// sigmoid
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.sigmoid();
+console.log(m2.data);    // [ [0.73106, 0.88080], [0.95257, 0.98201], [0.99331, 0.99753] ]
+
+// plus value
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.plus(5);
+console.log(m2.data);    // [ [6, 7], [8, 9], [10, 11] ]
+
+// any function
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.map(function(v) {
+    return v - 1;    
+});
+console.log(m2.data);    // [ [0, 1], [2, 3], [4, 5] ]
+
+
+/* Calculations */
+
+// sum all elements
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+console.log(m.getSum());    // 21
+
+
 ```
+
 
 ### Higher precision
 
@@ -193,33 +172,23 @@ var linAlg = require('linear-algebra')({
     Matrix = linAlg.Matrix;
 ```
 
-In the browser we need to load in the higher-precision version of the library:
+In the browser you will need to load in the higher-precision version of the library to be able to do this:
 
 ```html
 <script type="text/javascript" src="add.js" />
 <script type="text/javascript" src="linear-algebra.precision.js" />
-```
-
-Then we initialise it with an adder (mandatory when using the higher-precision version of the library):
-
-```javascript
+<script type="text/javascript">
 var linAlg = linearAlgebra({
     add: add
 }),
     Vector = linAlg.Vector,
     Matrix = linAlg.Matrix;
+</script>
 ```
 
+**Note: If you use the higher-precision version of the library with a custom adder then expect performance to drop significantly for some matrix operations.**
+
 ## Performance
-
-To maximize performance we keep in mind the following principle:
-
-* Overwriting an existing array is twice as fast as creating a new one - [stats](http://jsperf.com/create-new-array-vs-overwrite-existing).
-
-We try to minimize the number of times we do `new Array` when performing calculations by re-using old arrays:
-
-
-
 
 To run the performance benchmarks:
 
@@ -229,15 +198,19 @@ $ npm install
 $ gulp benchmark
 ```
 
-Here is sample benchmark output:
+As mentioned earlier, matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
+
+The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. However, this may not be true for all the matrix operations contained in this library:
 
 ```bash
-[16:44:02] Running suite Normal vs High precision - matrix multiplication [/Users/home/dev/js/linear-algebra/benchmark/nvh-matrix-mul.js]...
-[16:44:08]    Normal precision (5x5 matrix) x 1,156,332 ops/sec ±4.39% (88 runs sampled)
-[16:44:13]    Normal precision (30x30 matrix) x 9,826 ops/sec ±2.15% (93 runs sampled)
-[16:44:19]    High precision (5x5 matrix) x 167,466 ops/sec ±2.60% (91 runs sampled)
-[16:44:24]    High precision (30x30 matrix) x 604 ops/sec ±0.67% (80 runs sampled)
-[16:44:24] Fastest test is Normal precision (5x5 matrix) at 6.9x faster than High precision (5x5 matrix)
+ Starting 'benchmark'...
+[14:10:34] Running suite Default (new object) vs in-place modification [/Users/home/dev/js/linear-algebra/benchmark/default-vs-in-place.perf.js]...
+[14:10:39]    Matrix dot-product - default x 1,063,342 ops/sec ±2.26% (93 runs sampled)
+[14:10:45]    Matrix dot-product - in-place x 1,046,791 ops/sec ±3.45% (94 runs sampled)
+[14:10:50]    Matrix transpose (rows > cols) - default x 1,073,414 ops/sec ±2.55% (89 runs sampled)
+[14:10:56]    Matrix transpose (rows > cols) - in-place x 1,077,232 ops/sec ±2.14% (97 runs sampled)
+[14:11:01]    Matrix transpose (cols > rows) - default x 1,109,472 ops/sec ±1.99% (94 runs sampled)
+[14:11:07]    Matrix transpose (cols > rows) - in-place x 959,265 ops/sec ±1.13% (97 runs sampled)
 ```
 
 ## Building
@@ -246,7 +219,7 @@ To build the code and run the tests:
 
     $ npm install -g gulp
     $ npm install
-    $ npm run build
+    $ gulp
 
 
 ## Contributing
