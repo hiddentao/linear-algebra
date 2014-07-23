@@ -33,6 +33,10 @@ In the browser the library is exposed via the `linearAlgebra()` function.
 
 ## How to use
 
+Since linear algebra calculations tend to be CPU-intensive it is highly recommended that you run them within a separate thread or process. For browsers this means using a [web worker](https://en.wikipedia.org/wiki/Web_worker). For node.js there are plenty of [similar solutions](https://www.npmjs.org/search?q=webworker) available.
+
+### Initialisation
+
 The examples below assume you are running in node.js. The library needs to be initialised once loaded:
 
 ```javascript
@@ -235,6 +239,7 @@ If you're dealing with large matrices (>100 rows, columns) then you're more like
 [14:39:37]    Multiple matrix operations - default x 218 ops/sec ±2.57% (88 runs sampled)
 [14:39:42]    Multiple matrix operations - in-place x 222 ops/sec ±0.71% (89 runs sampled)
 ```
+
 
 ## Building
 
