@@ -8,7 +8,7 @@ This is a low-level algebra library which supports basic vector and matrix opera
 
 Features:
 
-* Simple, expressive API.
+* Simple, expressive, chainable API.
 * Array implementation with [performance optimizations](#performance).
 * Enhanced [floating point precision](#higher-precision) if needed.
 * Comprehensive unit tests.
