@@ -23,11 +23,11 @@ BUILD(MATH_OP, sigmoid, (1 / (1 + Math.exp(-thisData[row][col]))))
  * Multiply every element with given value.
  * @param  {Number} value Value to multiple with.
  */
-BUILD(MATH_OP, mul, thisData[row][col] * value, value)
+BUILD(MATH_OP, mulEach, thisData[row][col] * value, value)
 
 
 /**
  * Add a value to every element.
  * @param  {Number} value Value to multiple with.
  */
-BUILD(MATH_OP, plus, thisData[row][col] + value, value)
+BUILD(MATH_OP, plusEach, thisData[row][col] + value, value)

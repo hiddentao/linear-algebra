@@ -221,9 +221,9 @@ module.exports = function(linAlg, options) {
   };
 
   var otherBinaryAlgebraOps = {
-    mulEach: function(v1, v2) { return v1 * v2 },
-    plusEach: function(v1, v2) { return v1 + v2 },
-    minusEach: function(v1, v2) { return v1 - v2 },
+    mul: function(v1, v2) { return v1 * v2 },
+    plus: function(v1, v2) { return v1 + v2 },
+    minus: function(v1, v2) { return v1 - v2 },
   };
   Object.keys(otherBinaryAlgebraOps).forEach(function(fnName) {
     var fnExpCalcFn = otherBinaryAlgebraOps[fnName];
@@ -365,8 +365,8 @@ module.exports = function(linAlg, options) {
   var otherMathTransforms = {
     log: [ function(v) { return Math.log(v); } ],
     sigmoid: [ function(v) { return 1 / (1 + Math.exp(-v)); } ],
-    mul: [ function(v) { return v * 3.1; }, 3.1 ],
-    plus: [ function(v) { return v + 3.1; }, 3.1 ],
+    mulEach: [ function(v) { return v * 3.1; }, 3.1 ],
+    plusEach: [ function(v) { return v + 3.1; }, 3.1 ],
   };
   Object.keys(otherMathTransforms).forEach(function(fnName) {
     var fnExpCalcFn = otherMathTransforms[fnName][0];

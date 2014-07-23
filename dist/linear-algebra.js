@@ -258,7 +258,7 @@ Matrix.prototype.trans_ = function() {
 
 
 
-Matrix.prototype.mulEach = function(op2) {
+Matrix.prototype.mul = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -267,7 +267,7 @@ Matrix.prototype.mulEach = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('mulEach', this, op2);
+    _throwSizeMismatchError('mul', this, op2);
   }
   
   var row, col, result = new Array(cols);
@@ -286,7 +286,7 @@ Matrix.prototype.mulEach = function(op2) {
 
 
 
-Matrix.prototype.mulEach_ = function(op2) {
+Matrix.prototype.mul_ = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -295,7 +295,7 @@ Matrix.prototype.mulEach_ = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('mulEach_', this, op2);
+    _throwSizeMismatchError('mul_', this, op2);
   }
   
   var row, col;
@@ -312,7 +312,7 @@ Matrix.prototype.mulEach_ = function(op2) {
 
 
 
-Matrix.prototype.plusEach = function(op2) {
+Matrix.prototype.plus = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -321,7 +321,7 @@ Matrix.prototype.plusEach = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('plusEach', this, op2);
+    _throwSizeMismatchError('plus', this, op2);
   }
   
   var row, col, result = new Array(cols);
@@ -340,7 +340,7 @@ Matrix.prototype.plusEach = function(op2) {
 
 
 
-Matrix.prototype.plusEach_ = function(op2) {
+Matrix.prototype.plus_ = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -349,7 +349,7 @@ Matrix.prototype.plusEach_ = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('plusEach_', this, op2);
+    _throwSizeMismatchError('plus_', this, op2);
   }
   
   var row, col;
@@ -366,7 +366,7 @@ Matrix.prototype.plusEach_ = function(op2) {
 
 
 
-Matrix.prototype.minusEach = function(op2) {
+Matrix.prototype.minus = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -375,7 +375,7 @@ Matrix.prototype.minusEach = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('minusEach', this, op2);
+    _throwSizeMismatchError('minus', this, op2);
   }
   
   var row, col, result = new Array(cols);
@@ -394,7 +394,7 @@ Matrix.prototype.minusEach = function(op2) {
 
 
 
-Matrix.prototype.minusEach_ = function(op2) {
+Matrix.prototype.minus_ = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
     cols = this.cols,
@@ -403,7 +403,7 @@ Matrix.prototype.minusEach_ = function(op2) {
     cols2 = op2.cols;
 
   if (rows !== rows2 || cols !== cols2) {
-    _throwSizeMismatchError('minusEach_', this, op2);
+    _throwSizeMismatchError('minus_', this, op2);
   }
   
   var row, col;
@@ -679,7 +679,7 @@ Matrix.prototype.sigmoid_ = function(undefined) {
  * Multiply every element with given value.
  * @param  {Number} value Value to multiple with.
  */
-Matrix.prototype.mul = function(value) {
+Matrix.prototype.mulEach = function(value) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;
@@ -701,7 +701,7 @@ Matrix.prototype.mul = function(value) {
 
 
 
-Matrix.prototype.mul_ = function(value) {
+Matrix.prototype.mulEach_ = function(value) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;
@@ -726,7 +726,7 @@ Matrix.prototype.mul_ = function(value) {
  * Add a value to every element.
  * @param  {Number} value Value to multiple with.
  */
-Matrix.prototype.plus = function(value) {
+Matrix.prototype.plusEach = function(value) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;
@@ -748,7 +748,7 @@ Matrix.prototype.plus = function(value) {
 
 
 
-Matrix.prototype.plus_ = function(value) {
+Matrix.prototype.plusEach_ = function(value) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;

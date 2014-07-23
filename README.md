@@ -104,19 +104,19 @@ console.log(m3.data);    // [ [22, 28], [49, 64] ]
 // multiply corresponding elements
 m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
 m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
-m3 = m.mulEach(m2);
+m3 = m.mul(m2);
 console.log(m3.data);    // [ [10, 40], [90, 160], [250, 360] ]
 
 // add corresponding elements
 m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
 m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
-m3 = m.plusEach(m2);
+m3 = m.plus(m2);
 console.log(m3.data);    // [ [11, 22], [33, 44], [55, 66] ]
 
 // subtract corresponding elements
 m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
 m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
-m3 = m.minusEach(m2);
+m3 = m.minus(m2);
 console.log(m3.data);    // [ [9, 18], [27, 36], [45, 54] ]
 
 
@@ -132,10 +132,15 @@ m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
 m2 = m.sigmoid();
 console.log(m2.data);    // [ [0.73106, 0.88080], [0.95257, 0.98201], [0.99331, 0.99753] ]
 
-// plus value
+// add value to each element
 m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
-m2 = m.plus(5);
+m2 = m.plusEach(5);
 console.log(m2.data);    // [ [6, 7], [8, 9], [10, 11] ]
+
+// multiply each element by value
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.mulEach(5);
+console.log(m2.data);    // [ [5, 10], [15, 20], [25, 30] ]
 
 // any function
 m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
@@ -200,20 +205,23 @@ $ gulp benchmark
 
 As mentioned earlier, matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
 
-The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. However, this may not be true for all the matrix operations contained in this library, e.g.:
+The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. However, this may not be true for all the matrix operations contained in this library.
+
+If you're dealing with large matrices (>100 rows, columns) then you're more likely to see a benefit from using the _in-place_ versions of methods:
 
 ```bash
- Starting 'benchmark'...
-[14:10:34] Running suite Default (new object) vs in-place modification [/Users/home/dev/js/linear-algebra/benchmark/default-vs-in-place.perf.js]...
-[14:10:39]    Matrix dot-product - default x 1,063,342 ops/sec ±2.26% (93 runs sampled)
-[14:10:45]    Matrix dot-product - in-place x 1,046,791 ops/sec ±3.45% (94 runs sampled)
-[14:10:50]    Matrix transpose (rows > cols) - default x 1,073,414 ops/sec ±2.55% (89 runs sampled)
-[14:10:56]    Matrix transpose (rows > cols) - in-place x 1,077,232 ops/sec ±2.14% (97 runs sampled)
-[14:11:01]    Matrix transpose (cols > rows) - default x 1,109,472 ops/sec ±1.99% (94 runs sampled)
-[14:11:07]    Matrix transpose (cols > rows) - in-place x 959,265 ops/sec ±1.13% (97 runs sampled)
+[14:38:35] Running suite Default (new object) vs in-place modification [/Users/home/dev/js/linear-algebra/benchmark/default-vs-in-place.perf.js]...
+[14:38:41]    Matrix dot-product (5x5) - default x 1,114,666 ops/sec ±0.94% (96 runs sampled)
+[14:38:46]    Matrix dot-product (5x5) - in-place x 721,296 ops/sec ±2.95% (94 runs sampled)
+[14:38:52]    Matrix dot-product (100x100) - default x 269 ops/sec ±3.75% (88 runs sampled)
+[14:38:57]    Matrix dot-product (100x100) - in-place x 283 ops/sec ±0.94% (93 runs sampled)
+[14:39:09]    Matrix dot-product (500x500) - default x 1.40 ops/sec ±9.96% (8 runs sampled)
+[14:39:20]    Matrix dot-product (500x500) - in-place x 1.45 ops/sec ±4.30% (8 runs sampled)
+[14:39:26]    Matrix transpose (1000x5) - default x 13,770 ops/sec ±3.00% (91 runs sampled)
+[14:39:31]    Matrix transpose (1000x5) - in-place x 9,736 ops/sec ±2.44% (87 runs sampled)
+[14:39:37]    Multiple matrix operations - default x 218 ops/sec ±2.57% (88 runs sampled)
+[14:39:42]    Multiple matrix operations - in-place x 222 ops/sec ±0.71% (89 runs sampled)
 ```
-
-I recommend that you experiment with different methods to see what works best for you.
 
 ## Building
 
