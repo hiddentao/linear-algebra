@@ -209,7 +209,7 @@ $ gulp benchmark
 
 As mentioned earlier, matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
 
-The _in-place_ versions are provided because in general, overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. And since changing the size of an array is also an expensive operation, even if a matrix operation results in a smaller matrix than before the internal array is kept at the same size:
+The _in-place_ versions are provided because - general speaking- memory allocations and garbage collection are expensive operations you don't want happening when you're performing lots of calculations. Overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. And since changing the size of an array is also an expensive operation, even if a matrix operation results in a smaller matrix than before the internal array is kept at the same size:
 
 ```js
 var m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
