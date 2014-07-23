@@ -23,8 +23,8 @@
 
 
   var _throwSizeMismatchError = function(op, arg1, arg2) {
-    _throwError(op + ': op1 is ' + arg1.rows  + ' * ' + arg1.cols + 
-      ' and op2 is ' + arg2.rows + ' * ' + arg2.cols);
+    _throwError('[' + op + '] op1 is ' + arg1.rows  + ' x ' + arg1.cols + 
+      ' and op2 is ' + arg2.rows + ' x ' + arg2.cols);
   };
 
 
@@ -54,12 +54,12 @@
     if (Array.isArray(values[0])) {
       // matrix
       this.data = values;
-      this.rows = this.data.length;
-      this.cols = this.data[0];
+      this.rows = values.length;
+      this.cols = values[0].length;
     } else {
       // row-vector
       this.data = [values];
-      this.rows = this.data[0];
+      this.rows = 1;
       this.cols = values.length;
     }
   };
@@ -73,12 +73,13 @@
    */
   Matrix.prototype.clone = function() {
     var thisData = this.data,
-      rows = this.rows;
+      rows = this.rows,
+      cols = this.cols;
 
     var a = new Array(rows);
 
     for (var i = 0; i<rows; ++i) {
-      a[i] = thisData[i].slice(0);
+      a[i] = thisData[i].slice(0, cols);
     }
 
     return new Matrix(a);

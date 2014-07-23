@@ -7,7 +7,7 @@ var sinon = require('sinon'),
 chai.use(require('sinon-chai'));
 
 
-var linAlg = require('../dist/linear-algebra.precision.min');
+var linAlg = require('../dist/linear-algebra.precision');
 
 
 var precisionAdder = require('add');
@@ -39,23 +39,16 @@ subTest['custom adder'] = function() {
     return ret + 0.5;
   };
 
-  var Vector = linAlg({
+  var Matrix = linAlg({
     add: adder
-  }).Vector;
+  }).Matrix;
 
-  var v1 = new Vector([0.1, 0.2, 0.3]),
-    v2 = new Vector([2, 5, 10]);
+  var v1 = new Matrix([0.1, 0.2, 0.3]),
+    v2 = new Matrix([2, 5, 10]);
 
-  v1.dot(v2).should.eql(0.1*2 + 0.3*10 + 0.5); 
+  v1.dot(v2.trans()).data.should.eql([[ adder([0.1*2, 0.2*5, 0.3*10]) ]]); 
 };
 
-
-
-subTest['Vector']['sum'] = function() {
-  var v = new this.Vector([1.1, 2, 3.2]);
-
-  v.sum().should.eql(precisionAdder([1.1, 2, 3.2]));
-}
 
 
 test['high precision'] = subTest;

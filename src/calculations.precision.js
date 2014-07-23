@@ -16,9 +16,9 @@ Matrix.prototype.getSum = function(value) {
 
   var sum = new Array(rows * cols);
 
-  for (var i = 0; i<rows; ++i) {
+  for (var i = 0, jBase = 0; i<rows; ++i, jBase += cols) {
     for (var j = 0; j<cols; ++j) {
-      sum.push(thisData[i][j]);
+      sum[jBase + j] = thisData[i][j];
     }
   }
   

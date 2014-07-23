@@ -9,7 +9,7 @@ BUILD(MATH_OP, map, transformFn(thisData[row][col]), transformFn)
 /**
  * Calculate the natural log (ln) all the elements.
  */
-BUILD(MATH_OP, ln, Math.log(thisData[row][col]))
+BUILD(MATH_OP, log, Math.log(thisData[row][col]))
 
 
 /**

@@ -32,7 +32,7 @@ test['node interface'] = {
       mocker.spy(linAlg, '_normal');
 
       var LinAlg = linAlg();
-      LinAlg.Vector.should.be.instanceof(Function);
+      LinAlg.Matrix.should.be.instanceof(Function);
     },
     'precision': function() {
       mocker.spy(linAlg, '_precision');
@@ -40,7 +40,7 @@ test['node interface'] = {
       var LinAlg = linAlg({
         add: true
       });
-      LinAlg.Vector.should.be.instanceof(Function);
+      LinAlg.Matrix.should.be.instanceof(Function);
     },    
   }
 };

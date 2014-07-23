@@ -7,319 +7,418 @@ chai.use(require('sinon-chai'));
 module.exports = function(linAlg, options) {
   "use strict";
 
+  options = options || {};
+
   var test = {};
 
-  test['Vector'] = {
-    beforeEach: function() {
-      this.Vector = linAlg(options).Vector;
-    },
-    'need data': function() {
-      expect(function() { 
-        new Vector();
-      }).to.throw(Error);
-    },
-    'isVector': function() {
-      new this.Vector([]).isVector.should.be.true;
-    },
-    'dimensions': function() {
-      new this.Vector([]).size.should.eql(0);
-      new this.Vector([1]).size.should.eql(1);
-      new this.Vector([1,2]).size.should.eql(2);
-    },
-    'data': function() {
-      var a = [];
-      new this.Vector(a).data.should.eql(a);
-
-      var b = [1,2];
-      new this.Vector(b).data.should.eql(b);
-    },
-    'scale': function() {
-      var v = new this.Vector([1,2,3]);
-      var v2 = v.scale(6);
-      v2.should.not.eql(v);
-      v2.should.be.instanceOf(this.Vector);
-      v2.data.should.eql([6, 12, 18]);
-    },
-    'scale in-place': function() {
-      var v = new this.Vector([1,2,3]);
-      v.scaleP(6).should.eql(v);
-      v.data.should.eql([6, 12, 18]);
-    },
-    'minus': {
-      'different size': function() {
-        var v1 = new this.Vector([1,2]),
-          v2 = new this.Vector([4]);
-
-        expect(function() {
-          v1.minus(v2);
-        }).to.throw('Vector subtraction requires vectors to have same size');
-      },
-      'same size': function() {
-        var v1 = new this.Vector([1.1, 2]),
-          v2 = new this.Vector([4, 0.2]),
-          v3 = v1.minus(v2);
-
-        v3.should.be.instanceOf(this.Vector);
-        v3.data.should.eql([ 1.1-4, 2 - 0.2 ]);
-        (v3 === v1 || v3 === v2).should.be.false;
-      }
-    },
-    'minus in-place': {
-      'different size': function() {
-        var v1 = new this.Vector([1,2]),
-          v2 = new this.Vector([4]);
-
-        expect(function() {
-          v1.minusP(v2);
-        }).to.throw('Vector subtraction requires vectors to have same size');
-      },
-      'same size': function() {
-        var v1 = new this.Vector([1.1, 2]),
-          v2 = new this.Vector([4, 0.2]),
-          v3 = v1.minusP(v2);
-
-        v3.should.eql(v1);
-        v1.data.should.eql([ 1.1-4, 2 - 0.2 ]);
-      }
-    },
-    'plus': {
-      'different size': function() {
-        var v1 = new this.Vector([1,2]),
-          v2 = new this.Vector([4]);
-
-        expect(function() {
-          v1.plus(v2);
-        }).to.throw('Vector addition requires vectors to have same size');
-      },
-      'same size': function() {
-        var v1 = new this.Vector([1.1, 2]),
-          v2 = new this.Vector([4, 0.2]),
-          v3 = v1.plus(v2);
-
-        v3.should.be.instanceOf(this.Vector);
-        v3.data.should.eql([ 1.1+4, 2+0.2 ]);
-        (v3 === v1 || v3 === v2).should.be.false;
-      }
-    },
-    'plus in-place': {
-      'different size': function() {
-        var v1 = new this.Vector([1,2]),
-          v2 = new this.Vector([4]);
-
-        expect(function() {
-          v1.plusP(v2);
-        }).to.throw('Vector addition requires vectors to have same size');
-      },
-      'same size': function() {
-        var v1 = new this.Vector([1.1, 2]),
-          v2 = new this.Vector([4, 0.2]),
-          v3 = v1.plusP(v2);
-
-        v3.should.eql(v1);
-        v1.data.should.eql([ 1.1+4, 2+0.2 ]);
-      }
-    },
-    'dot product': {
-      'different size': function() {
-        var v1 = new this.Vector([1,2]),
-          v2 = new this.Vector([4]);
-
-        expect(function() {
-          v1.dot(v2);
-        }).to.throw('Vector dot product requires vectors to have same size');
-      },
-      'same size': function() {
-        var v1 = new this.Vector([1.1, 2]),
-          v2 = new this.Vector([4, 0.2]),
-          v1dot2 = v1.dot(v2),
-          v2dot1 = v2.dot(v1);
-
-        v1dot2.should.eql(v2dot1);
-        v1dot2.should.eql(4.4 + 0.4);
-      }
-    }
-  };
-
-
-
-
+  // Basic
+  // 
   test['Matrix'] = {
-    beforeEach: function() {
-      var LinAlg = linAlg(options);
-      this.Vector = LinAlg.Vector;
-      this.Matrix = LinAlg.Matrix;
+    'beforeEach': function() {
+      this.Matrix = linAlg(options).Matrix;
     },
-    'need data': function() {
-      expect(function() { 
-        new Matrix();
-      }).to.throw(Error);
-    },
-    'isMatrix': function() {
-      new this.Matrix([[]]).isMatrix.should.be.true;
-    },
-    'dimensions': function() {
-      expect(function() {
-        new this.Matrix([]);
-      }).to.throw(Error);
 
-      var a = [[]];
-      new this.Matrix(a).size.should.eql([1,0]);
-
-      a = [ [1,2], [3,4], [5,6] ];
-      var m = new this.Matrix(a);
-      m.size.should.eql([3,2]);
-      m.rows.should.eql(3);
-      m.cols.should.eql(2);
-    },
-    'data': function() {
-      var a = [ [1,2], [3,4], [5,6] ];
-      new this.Matrix(a).data.should.eql(a);
-    },
-    'scale': function() {
-      var a = [ [1,2], [3,4], [5,6] ];
-      var m = new this.Matrix(a);
-      var m2 = m.scale(6);
-      m2.should.not.eql(m);
-      m2.data.should.eql([ [6,12], [18,24], [30,36] ]);
-    },
-    'scale in-place': function() {
-      var a = [ [1,2], [3,4], [5,6] ];
-      var m = new this.Matrix(a);
-      m.scaleP(6).should.eql(m);
-      m.data.should.eql([ [6,12], [18,24], [30,36] ]);
-    },
-    'transpose': function() {
-      var a = [ [1,2], [3,4], [5,6] ];
-      var m = new this.Matrix(a);
-
-      var res = m.transpose();
-
-      res.should.be.instanceOf(this.Matrix);
-      res.data.should.eql([ [1, 3, 5], [2, 4, 6] ]);
-    },
-    'dot product': {
-      'wrong size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
+    'constructor': {
+      '2d array': function() {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
         var m = new this.Matrix(a);
-
-        var v = new this.Vector([1,2, 3]);
-
-        expect(function() {
-          m.dot(1, v);
-        }).to.throw('Vector dot product requires this.columns = vector.size');
+        m.data.should.eql(a);
+        m.rows.should.eql(3);
+        m.cols.should.eql(2);
       },
-      'right size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
+      '1d array': function() {
+        var a = [1, 2, 3, 4 ];
         var m = new this.Matrix(a);
-
-        var v = new this.Vector([2, 3.1]);
-
-        m.dot(1, v).should.eql(18.4);
+        m.data.should.eql([a]);
+        m.rows.should.eql(1);
+        m.cols.should.eql(4);        
       }
     },
-    'mul': {
-      beforeEach: function() {
-        var a = [ [1,2], [3,4], [5,6] ];
-        this.m = new this.Matrix(a);
+
+    'clone': {
+      'deep copy': function() {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+
+        var c = m.clone();
+        c.data.should.eql(a);
+        c.rows.should.eql(3);
+        c.cols.should.eql(2);
+
+        m.data[0][1] = 5;
+        c.data[0][1].should.eql(2);        
       },
-      'with vector': {
-        'wrong size': function() {
-          var self = this;
+      'only what is valid': function() {
+        var a = [ [1, 2, 5], [3, 4, 6], [5, 6, 7] ];
+        var m = new this.Matrix(a);
 
-          var v = new this.Vector([1, 0.5, -1]);
+        // artificially limit
+        m.cols = 2;
+        m.rows = 2; 
 
-          expect(function() {
-            self.m.mul(v);
-          }).to.throw('Multiplying by vector requires this.columns = vector.size');
+        var c = m.clone();
+
+        c.data.should.eql([ [1, 2], [3, 4] ]);
+        c.rows = 2;
+        c.cols = 2;
+      }
+    },
+
+    '.identity': function() {
+        var m = this.Matrix.identity(3);
+        
+        m.should.be.instanceOf(this.Matrix);
+        m.data.should.eql([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]);
+    },
+
+    '.scalar': function() {
+        var m = this.Matrix.scalar(3, 9);
+        
+        m.should.be.instanceOf(this.Matrix);
+        m.data.should.eql([ [9, 0, 0], [0, 9, 0], [0, 0, 9] ]);
+    },
+  };
+    
+  // algebra 
+    
+  test['Matrix']['algebra'] = {
+    'transpose': {
+      'default': {
+        'cols > rows': function() {
+          var a = [ [1, 2, 5], [3, 4, 6] ];
+          var m = new this.Matrix(a);
+
+          var m2 = m.trans();
+          m2.should.be.instanceOf(this.Matrix);
+          m2.should.not.eql(m);
+
+          m2.data.should.not.eql(m.data);
+          m2.data.should.eql([ [1, 3], [2, 4], [5, 6] ]);
+          m2.rows = 3;
+          m2.cols = 2;
         },
-        'right size': function() {
-          var v = new this.Vector([1, 0.5]);
+        'rows > cols': function() {
+          var a = [ [1, 2], [3, 4], [5, 6] ];
+          var m = new this.Matrix(a);
 
-          var res = this.m.mul(v);
+          var m2 = m.trans();
+          m2.should.be.instanceOf(this.Matrix);
+          m2.should.not.eql(m);
 
-          res.should.be.instanceOf(this.Vector);
-
-          res.data.should.eql([ 2, 5, 8 ]);
+          m2.data.should.not.eql(m.data);
+          m2.data.should.eql([ [1, 3, 5], [2, 4, 6] ]);
+          m2.rows = 2;
+          m2.cols = 3;
         }
       },
-      'with matrix': {
-        'wrong size': function() {
-          var self = this;
+      'in-place': {
+        'cols > rows': function() {
+          var a = [ [1, 2, 5], [3, 4, 6] ];
+          var m = new this.Matrix(a);
 
-          var m2 = new this.Matrix([ [5,7], [0.5,-4], [-9,2] ]);
+          var m2 = m.trans_();
+          m2.should.eql(m);
+
+          m2.data.should.eql(m.data);
+          m2.data.should.eql([ [1, 3, 5], [2, 4, 6], [5, 6] ]);
+          m2.rows = 3;
+          m2.cols = 2;
+        },
+        'rows > cols': function() {
+          var a = [ [1, 2], [3, 4], [5, 6] ];
+          var m = new this.Matrix(a);
+
+          var m2 = m.trans_();
+          m2.should.eql(m);
+
+          m2.data.should.eql(m.data);
+          m2.data.should.eql([ [1, 3, 5], [2, 4, 6], [5, 6] ]);
+          m2.rows = 2;
+          m2.cols = 3;
+        }        
+      }
+    },
+
+    'dot': {
+      'default': {
+        'size mismatch': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6] ]);
+          var m3 = new this.Matrix([ [1, 2, 5] ]);
 
           expect(function() {
-            self.m.mul(m2);
-          }).to.throw('Multiplying by matrix requires this.columns = matrix.rows');
+            m.dot(m2)
+          }).throws('linear-algebra: [dot] op1 is 3 x 3 and op2 is 2 x 3');
+
+          expect(function() {
+            m.dot(m3)
+          }).throws('linear-algebra: [dot] op1 is 3 x 3 and op2 is 1 x 3');
         },
-        'right size': function() {
-          var m2 = new this.Matrix([ [5, 7, 0.5, 8], [0.5, -4, 9, -1] ]);
+        'size match': function() {
+          var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+          var m2 = new this.Matrix([ [0.2], [2.3], [5.5] ]);
 
-          var res = this.m.mul(m2);
+          var m3 = m.dot(m2);
+          m3.should.be.instanceOf(this.Matrix);
+          m3.should.not.eql(m);
 
-          res.should.be.instanceOf(this.Matrix);
+          m3.data.should.not.eql(m.data);
+          
+          var r1, r2;
 
-          res.data.should.eql([ [6, -1, 18.5, 6], [17, 5, 37.5, 20], [28, 11, 56.5, 34] ]);
+          if (options.adder) {
+            r1 = options.adder([0.1*0.2, 0.2*2.3, 0.5*5.5]);
+            r2 = options.adder([0.3*0.2, 1.4*2.3, 1.6*5.5]);
+          } else {
+            r1 = 0.1*0.2 + 0.2*2.3 + 0.5*5.5
+            r2 = 0.3*0.2 + 1.4*2.3 + 1.6*5.5;
+          }
+
+          m3.data.should.eql([ [r1], [r2] ]);
+          m3.rows = 2;
+          m3.cols = 1;
+        }
+      },
+      'in-place': {
+        'size mismatch': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6] ]);
+          var m3 = new this.Matrix([ [1, 2, 5] ]);
+
+          expect(function() {
+            m.dot_(m2)
+          }).throws('linear-algebra: [dot_] op1 is 3 x 3 and op2 is 2 x 3');
+
+          expect(function() {
+            m.dot_(m3)
+          }).throws('linear-algebra: [dot_] op1 is 3 x 3 and op2 is 1 x 3');
+        },
+        'size match': function() {
+          var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+          var m2 = new this.Matrix([ [0.2], [2.3], [5.5] ]);
+
+          var m3 = m.dot_(m2);
+          m3.should.eql(m);
+
+          m3.data.should.eql(m.data);
+          
+          var r1, r2;
+
+          if (options.adder) {
+            r1 = options.adder([0.1*0.2, 0.2*2.3, 0.5*5.5]);
+            r2 = options.adder([0.3*0.2, 1.4*2.3, 1.6*5.5]);
+          } else {
+            r1 = 0.1*0.2 + 0.2*2.3 + 0.5*5.5
+            r2 = 0.3*0.2 + 1.4*2.3 + 1.6*5.5;
+          }
+
+          m3.data.should.eql([ [r1, 0.2, 0.5], [r2, 1.4, 1.6] ]);
+          m3.rows = 2;
+          m3.cols = 1;
         }
       }
-    },
-    'plus columns': {
-      'wrong size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
-        var m = new this.Matrix(a);
-
-        var v = new this.Vector([1,2, 3]);
-
-        expect(function() {
-          m.plusCols(v);
-        }).to.throw('Vector length must equal no. of columns');
-      },
-      'right size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
-        var m = new this.Matrix(a);
-
-        var v = new this.Vector([2, 3.1]);
-
-        var m2 = m.plusCols(v);
-        m2.should.not.eql(m);
-        m2.data.should.eql([ [3,5.1], [5,7.1], [7,9.1] ]);
-      }
-    },
-    'plus columns in-place': {
-      'wrong size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
-        var m = new this.Matrix(a);
-
-        var v = new this.Vector([1,2, 3]);
-
-        expect(function() {
-          m.plusColsP(v);
-        }).to.throw('Vector length must equal no. of columns');
-      },
-      'right size': function() {
-        var a = [ [1,2], [3,4], [5,6] ];
-        var m = new this.Matrix(a);
-
-        var v = new this.Vector([2, 3.1]);
-
-        var m2 = m.plusColsP(v);
-        m2.should.eql(m);
-        m.data.should.eql([ [3,5.1], [5,7.1], [7,9.1] ]);
-      }
-    },
-    'scalar': function() {
-      var m1 = this.Matrix.scalar(3, 1.2);
-
-      m1.should.be.instanceOf(this.Matrix);
-      m1.data.should.eql([ [1.2, 0, 0], [0, 1.2, 0], [0, 0, 1.2] ]);
-    },
-    'identity': function() {
-      var m1 = this.Matrix.identity(3);
-
-      m1.should.be.instanceOf(this.Matrix);
-      m1.data.should.eql([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ]);
     }
   };
+
+  var otherBinaryAlgebraOps = {
+    mulEach: function(v1, v2) { return v1 * v2 },
+    plusEach: function(v1, v2) { return v1 + v2 },
+    minusEach: function(v1, v2) { return v1 - v2 },
+  };
+  Object.keys(otherBinaryAlgebraOps).forEach(function(fnName) {
+    var fnExpCalcFn = otherBinaryAlgebraOps[fnName];
+
+    test['Matrix']['algebra'][fnName] = {
+      beforeEach: function() {
+        this.buildExpArr = function(m, m2) {
+          var ret = [];
+          for (var i=0; i<3; ++i) {
+            ret[i] = [];
+
+            for (var j=0; j<3; ++j) {
+              ret[i][j] = fnExpCalcFn(m.data[i][j], m2.data[i][j]);
+            }
+          }
+
+          return ret;
+        };
+      },
+      'default': {
+        'size mismatch': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6] ]);
+          var m3 = new this.Matrix([ [1, 2], [3, 4], [5, 6] ]);
+
+          expect(function() {
+            m[fnName](m2)
+          }).throws('linear-algebra: [' + fnName + '] op1 is 3 x 3 and op2 is 2 x 3');
+
+          expect(function() {
+            m[fnName](m3)
+          }).throws('linear-algebra: [' + fnName + '] op1 is 3 x 3 and op2 is 3 x 2');
+        },
+        'size match': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6], [0.5, 0.6, 0.7] ]);
+
+          var m3 = m[fnName](m2);
+          m3.should.be.instanceOf(this.Matrix);
+          m3.should.not.eql(m);
+
+          m3.data.should.not.eql(m.data);
+          m3.data.should.eql(this.buildExpArr(m, m2));
+          m3.rows = 3;
+          m3.cols = 3;
+        }
+      },
+      'in-place': {
+        'size mismatch': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6] ]);
+          var m3 = new this.Matrix([ [1, 2], [3, 4], [5, 6] ]);
+
+          expect(function() {
+            m[fnName+'_'](m2)
+          }).throws('linear-algebra: [' + fnName + '_] op1 is 3 x 3 and op2 is 2 x 3');
+
+          expect(function() {
+            m[fnName+'_'](m3)
+          }).throws('linear-algebra: [' + fnName + '_] op1 is 3 x 3 and op2 is 3 x 2');
+        },
+        'size match': function() {
+          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var mCopy = m.clone();
+          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6], [0.5, 0.6, 0.7] ]);
+
+          var m3 = m[fnName+'_'](m2);
+          m3.should.eql(m);
+
+          m3.data.should.eql(m.data);
+          m3.data.should.eql(this.buildExpArr(mCopy, m2));
+          m3.rows = 3;
+          m3.cols = 3;
+        }
+      }
+    }
+  });
+
+
+  // calculations
+
+  test['Matrix']['calculations'] = {
+    'getSum': function() {
+      var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+
+      var expected;
+      if (options.adder) {
+        expected = options.adder([0.1, 0.2, 0.5, 0.3, 1.4, 1.6]);
+      } else {
+        expected = 0.1 + 0.2 + 0.5 + 0.3 + 1.4 + 1.6;
+      }
+
+      m.getSum().should.eql(expected);
+    },
+  };
+
+
+  // math transforms
+  // 
+  test['Matrix']['math-transforms'] = {
+    'map': {
+      'default': function() {
+        var stub = this.mocker.spy(function(v) {
+          return v * 2;
+        });
+
+        var m = new this.Matrix([ [1, 2, 3], [4, 5, 7] ]);
+
+        var m2 = m.map(stub);
+        m2.should.not.eql(m);
+
+        m2.data.should.not.eql(m.data);
+        m2.data.should.eql([ [2, 4, 6], [8, 10, 14] ]);
+        m2.rows.should.eql(2);
+        m2.cols.should.eql(3);
+
+        stub.callCount.should.eql(6);
+      },
+      'in-place': function() {
+        var stub = this.mocker.spy(function(v) {
+          return v * 2;
+        });
+
+        var m = new this.Matrix([ [1, 2, 3], [4, 5, 7] ]);
+
+        var m2 = m.map_(stub);
+        m2.should.eql(m);
+
+        m2.data.should.eql(m.data);
+        m2.data.should.eql([ [2, 4, 6], [8, 10, 14] ]);
+        m2.rows.should.eql(2);
+        m2.cols.should.eql(3);
+
+        stub.callCount.should.eql(6);          
+      }
+    }
+  }
+  
+  var otherMathTransforms = {
+    log: [ function(v) { return Math.log(v); } ],
+    sigmoid: [ function(v) { return 1 / (1 + Math.exp(-v)); } ],
+    mul: [ function(v) { return v * 3.1; }, 3.1 ],
+    plus: [ function(v) { return v + 3.1; }, 3.1 ],
+  };
+  Object.keys(otherMathTransforms).forEach(function(fnName) {
+    var fnExpCalcFn = otherMathTransforms[fnName][0];
+    var fnParam = otherMathTransforms[fnName][1];
+
+    test['Matrix']['math-transforms'][fnName] = {
+      'default': function() {
+        var m = new this.Matrix([ [1, 2, 3], [4, 7, 6] ]);
+
+        var m2 = m[fnName](fnParam);
+        m2.should.not.eql(m);
+
+        m2.data.should.not.eql(m.data);
+        m2.data.should.eql([ [ fnExpCalcFn(1), fnExpCalcFn(2), fnExpCalcFn(3)], [fnExpCalcFn(4), fnExpCalcFn(7), fnExpCalcFn(6)] ]);
+        m2.rows.should.eql(2);
+        m2.cols.should.eql(3);
+      },
+      'in-place': function() {
+        var m = new this.Matrix([ [1, 2, 3], [4, 7, 6] ]);
+
+        var m2 = m[fnName + '_'](fnParam);
+        m2.should.eql(m);
+
+        m2.data.should.eql(m.data);
+        m2.data.should.eql([ [ fnExpCalcFn(1), fnExpCalcFn(2), fnExpCalcFn(3)], [fnExpCalcFn(4), fnExpCalcFn(7), fnExpCalcFn(6)] ]);
+        m2.rows.should.eql(2);
+        m2.cols.should.eql(3);
+      }
+    }
+  });
+
+  // Vector
+
+  test['Vector'] = {
+    'beforeEach': function() {
+      var linalg = linAlg(options);
+      this.Matrix = linalg.Matrix;
+      this.Vector = linalg.Vector;
+    },
+
+    'should be plain object': function() {
+      (typeof this.Vector).should.eql('object');
+    },
+
+    '.zero': function() {
+      var v = this.Vector.zero(5);
+
+      v.should.be.instanceOf(this.Matrix);
+      v.data.should.eql( [[0, 0, 0, 0, 0]] );
+    }
+  };
+
 
 
   return test;

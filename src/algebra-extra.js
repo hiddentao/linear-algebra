@@ -23,18 +23,18 @@ Matrix.prototype.dot = function(op2) {
   // op2 = m2 x n2
   // op1 * op2 => m x n2
 
-  var row, row2, col;
+  var row, row2, col2;
 
   var result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols2);
 
-    for (col=0; col<cols2; ++col) {
-      result[row][col] = 0;
+    for (col2=0; col2<cols2; ++col2) {
+      result[row][col2] = 0;
 
       for (row2=0; row2<rows2; ++row2) {
-        result[row][col] += thisData[row][col] * op2[row2][col];
+        result[row][col2] += thisData[row][row2] * op2Data[row2][col2];
       }
     }
   }  
@@ -66,17 +66,17 @@ Matrix.prototype.dot_ = function(op2) {
   // op2 = m2 x n2
   // op1 * op2 => m x n2
 
-  var row, row2, col, tmp;
+  var row, row2, col2, tmp;
 
   for (row=0; row<rows; ++row) {
     // we need to keep a copy of this row since we'll be overwriting it in this.data
     tmp = thisData[row].slice(0, cols);
 
-    for (col=0; col<cols2; ++col) {
-      thisData[row][col] = 0;
+    for (col2=0; col2<cols2; ++col2) {
+      thisData[row][col2] = 0;
 
       for (row2=0; row2<rows2; ++row2) {
-        thisData[row][col] += tmp[col] * op2[row2][col];
+        thisData[row][col2] += tmp[row2] * op2Data[row2][col2];
       }
     }
   }  

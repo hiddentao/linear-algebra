@@ -23,8 +23,8 @@
 
 
   var _throwSizeMismatchError = function(op, arg1, arg2) {
-    _throwError(op + ': op1 is ' + arg1.rows  + ' * ' + arg1.cols + 
-      ' and op2 is ' + arg2.rows + ' * ' + arg2.cols);
+    _throwError('[' + op + '] op1 is ' + arg1.rows  + ' x ' + arg1.cols + 
+      ' and op2 is ' + arg2.rows + ' x ' + arg2.cols);
   };
 
 
@@ -54,12 +54,12 @@
     if (Array.isArray(values[0])) {
       // matrix
       this.data = values;
-      this.rows = this.data.length;
-      this.cols = this.data[0];
+      this.rows = values.length;
+      this.cols = values[0].length;
     } else {
       // row-vector
       this.data = [values];
-      this.rows = this.data[0];
+      this.rows = 1;
       this.cols = values.length;
     }
   };
@@ -73,12 +73,13 @@
    */
   Matrix.prototype.clone = function() {
     var thisData = this.data,
-      rows = this.rows;
+      rows = this.rows,
+      cols = this.cols;
 
     var a = new Array(rows);
 
     for (var i = 0; i<rows; ++i) {
-      a[i] = thisData[i].slice(0);
+      a[i] = thisData[i].slice(0, cols);
     }
 
     return new Matrix(a);
@@ -455,21 +456,21 @@ Matrix.prototype.dot = function(op2) {
   // op2 = m2 x n2
   // op1 * op2 => m x n2
 
-  var row, row2, col, tmp;
+  var row, row2, col2, tmp;
 
   var result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols2);
 
-    for (col=0; col<cols2; ++col) {
+    for (col2=0; col2<cols2; ++col2) {
       tmp = new Array(rows2);
 
       for (row2=0; row2<rows2; ++row2) {
-        tmp[row2] += thisData[row][col] * op2[row2][col];
+        tmp[row2] = thisData[row][row2] * op2Data[row2][col2];
       }
 
-      result[row][col] = adder(tmp);
+      result[row][col2] = adder(tmp);
     }
   }  
 
@@ -500,20 +501,20 @@ Matrix.prototype.dot_ = function(op2) {
   // op2 = m2 x n2
   // op1 * op2 => m x n2
 
-  var row, row2, col, tmp, tmp2;
+  var row, row2, col2, tmp, tmp2;
 
   for (row=0; row<rows; ++row) {
     // we need to keep a copy of this row since we'll be overwriting it in this.data
     tmp = thisData[row].slice(0, cols);
 
-    for (col=0; col<cols2; ++col) {
+    for (col2=0; col2<cols2; ++col2) {
       tmp2 = new Array(rows2);
 
       for (row2=0; row2<op2.rows; ++row2) {
-        tmp2[row2] = tmp[col] * op2[row2][col];
+        tmp2[row2] = tmp[row2] * op2Data[row2][col2];
       }
 
-      thisData[row][col] = adder(tmp2);
+      thisData[row][col2] = adder(tmp2);
     }
   }  
 
@@ -545,9 +546,9 @@ Matrix.prototype.getSum = function(value) {
 
   var sum = new Array(rows * cols);
 
-  for (var i = 0; i<rows; ++i) {
+  for (var i = 0, jBase = 0; i<rows; ++i, jBase += cols) {
     for (var j = 0; j<cols; ++j) {
-      sum.push(thisData[i][j]);
+      sum[jBase + j] = thisData[i][j];
     }
   }
   
@@ -605,7 +606,7 @@ Matrix.prototype.map_ = function(transformFn) {
 /**
  * Calculate the natural log (ln) all the elements.
  */
-Matrix.prototype.ln = function(undefined) {
+Matrix.prototype.log = function(undefined) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;
@@ -627,7 +628,7 @@ Matrix.prototype.ln = function(undefined) {
 
 
 
-Matrix.prototype.ln_ = function(undefined) {
+Matrix.prototype.log_ = function(undefined) {
   var thisData = this.data,
     rows = this.rows,
     cols = this.cols;

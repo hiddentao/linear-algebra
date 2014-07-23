@@ -1,4 +1,4 @@
-Matrix.prototype.getSum = function(value) {
+Matrix.prototype.getSum = function() {
  var thisData = this.data,
    rows = this.rows,
    cols = this.cols;

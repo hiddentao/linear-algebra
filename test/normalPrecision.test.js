@@ -7,7 +7,7 @@ var sinon = require('sinon'),
 chai.use(require('sinon-chai'));
 
 
-var linAlg = require('../dist/linear-algebra.min');
+var linAlg = require('../dist/linear-algebra');
 
 
 var test = module.exports = {
@@ -20,14 +20,5 @@ var test = module.exports = {
 };
 
 
-var subTest = require('./_commonTests')(linAlg);
-
-subTest['Vector']['sum'] = function() {
-  var v = new this.Vector([1.1, 2, 3.2]);
-
-  v.sum().should.eql(1.1 + 2 + 3.2);
-}
-
-
-test['normal precision'] = subTest;
+test['normal precision'] = require('./_commonTests')(linAlg);
 
