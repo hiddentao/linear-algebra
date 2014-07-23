@@ -1,33 +1,33 @@
 var base = require('./_base');
 
-var normal5 = base.buildMatrix(5);
-var normal30 = base.buildMatrix(30);
+var normal5 = base.buildMatrix(5, 5);
+var normal30 = base.buildMatrix(30, 30);
 
-var high5 = base.buildMatrix(5, base.highPrecision.Matrix);
-var high30 = base.buildMatrix(30, base.highPrecision.Matrix);
+var high5 = base.buildMatrix(5, 5, base.highPrecision.Matrix);
+var high30 = base.buildMatrix(30, 30, base.highPrecision.Matrix);
 
 
 module.exports = {
-  name: 'Normal vs High precision - matrix multiplication',
+  name: 'Normal vs High precision',
   tests: {
-    'Normal precision (5x5 matrix)': {
+    'Normal precision (5x5 matrix dot-product)': {
       fn: function() {
-        return normal5.mul(normal5);
+        return normal5.dot(normal5);
       }
     },
-    'Normal precision (30x30 matrix)': {
+    'High precision (5x5 matrix dot-product)': {
       fn: function() {
-        return normal30.mul(normal30);
+        return high5.dot(high5);
       }
     },
-    'High precision (5x5 matrix)': {
+    'Normal precision (30x30 matrix dot-product)': {
       fn: function() {
-        return high5.mul(high5);
+        return normal30.dot(normal30);
       }
     },
-    'High precision (30x30 matrix)': {
+    'High precision (30x30 matrix dot-product)': {
       fn: function() {
-        return high30.mul(high30);
+        return high30.dot(high30);
       }
     },
   }
