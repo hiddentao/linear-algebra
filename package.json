@@ -1,6 +1,6 @@
 {
   "name": "linear-algebra",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "Efficient, high-performance linear algebra library",
   "main": "index.js",
   "scripts": {
