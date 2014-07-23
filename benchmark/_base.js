@@ -14,11 +14,23 @@ exports.Matrix = normalPrecision.Matrix;
  * Build a matrix of random numbers with given matrix class.
  * @return {MatrixClass}
  */
-exports.buildMatrix = function(rows, cols, MatrixClass) {
+var buildMatrix = exports.buildMatrix = function(rows, cols, MatrixClass) {
   if (!MatrixClass) {
     MatrixClass = normalPrecision.Matrix;
   }
 
+  return new MatrixClass(buildArray(rows, cols));
+};
+
+
+
+
+
+/** 
+ * Build an array of random numbers
+ * @return {MatrixClass}
+ */
+var buildArray = exports.buildArray = function(rows, cols) {
   var a = new Array(rows);
 
   for (var i=0; i<rows; ++i) {
@@ -29,8 +41,6 @@ exports.buildMatrix = function(rows, cols, MatrixClass) {
     }
   }
 
-  return new MatrixClass(a);
+  return a;
 };
-
-
 

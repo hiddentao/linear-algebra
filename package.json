@@ -43,6 +43,8 @@
     "add": "~2.0.6",
     "gulp-bench": "~1.0.3",
     "gulp-replace": "~0.4.0",
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "sylvester": "0.0.21",
+    "linalg": "~0.3.2"
   }
 }

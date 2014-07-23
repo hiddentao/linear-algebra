@@ -199,6 +199,15 @@ var linAlg = linearAlgebra({
 
 ## Performance
 
+Performance vs. similar modules:
+
+```bash
+[17:23:14] Running suite vs. other modules [/Users/home/dev/js/linear-algebra/benchmark/vs-other-modules.perf.js]...
+[17:23:20]    Matrix dot-product (100x100) - linear-algebra x 288 ops/sec ±1.21% (88 runs sampled)
+[17:23:25]    Matrix dot-product (100x100) - sylvester x 56.77 ops/sec ±4.51% (61 runs sampled)
+[17:23:25] Fastest test is Matrix dot-product (100x100) - linear-algebra at 5.1x faster than Matrix dot-product (100x100) - sylvester
+```
+
 To run the performance benchmarks:
 
 ```bash
@@ -207,7 +216,7 @@ $ npm install
 $ gulp benchmark
 ```
 
-As mentioned earlier, matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
+Matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
 
 The _in-place_ versions are provided because - general speaking- memory allocations and garbage collection are expensive operations you don't want happening when you're performing lots of calculations. Overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. And since changing the size of an array is also an expensive operation, even if a matrix operation results in a smaller matrix than before the internal array is kept at the same size:
 
@@ -239,7 +248,6 @@ If you're dealing with large matrices (>100 rows, columns) then you're more like
 [14:39:37]    Multiple matrix operations - default x 218 ops/sec ±2.57% (88 runs sampled)
 [14:39:42]    Multiple matrix operations - in-place x 222 ops/sec ±0.71% (89 runs sampled)
 ```
-
 
 ## Building
 
