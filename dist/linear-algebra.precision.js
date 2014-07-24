@@ -72,6 +72,18 @@
    * @return {Matrix}
    */
   Matrix.prototype.clone = function() {
+    return new Matrix(this.toArray());
+  };
+
+
+
+
+  /**
+   * Get plain array version of this matrix.
+   * 
+   * @return {Array}
+   */
+  Matrix.prototype.toArray = function() {
     var thisData = this.data,
       rows = this.rows,
       cols = this.cols;
@@ -82,13 +94,8 @@
       a[i] = thisData[i].slice(0, cols);
     }
 
-    return new Matrix(a);
+    return a;
   };
-
-
-
-
-
 
 
 

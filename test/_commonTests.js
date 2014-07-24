@@ -35,16 +35,42 @@ module.exports = function(linAlg, options) {
       }
     },
 
+    'toArray': {
+      'deep copy': function() {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+
+        var c = m.toArray();
+        (c === m.data).should.not.be.true;
+        c.should.eql(m.data);
+        a[0][1] = 5;
+        c[0][1].should.eql(2);
+      },
+      'only what is valid': function() {
+        var a = [ [1, 2, 5], [3, 4, 6], [5, 6, 7] ];
+        var m = new this.Matrix(a);
+
+        // artificially limit
+        m.cols = 2;
+        m.rows = 2; 
+
+        var c = m.toArray();
+
+        c.should.eql([ [1, 2], [3, 4] ]);
+      }
+    },
+
     'clone': {
       'deep copy': function() {
         var a = [ [1, 2], [3, 4], [5, 6] ];
         var m = new this.Matrix(a);
 
         var c = m.clone();
-        c.data.should.eql(a);
         c.rows.should.eql(3);
         c.cols.should.eql(2);
 
+        (c.data === m.data).should.not.be.true;
+        c.data.should.eql(m.data);
         m.data[0][1] = 5;
         c.data[0][1].should.eql(2);        
       },

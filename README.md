@@ -161,6 +161,17 @@ m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
 console.log(m.getSum());    // 21
 
 
+/* Other methods */
+
+// cloning
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.clone();
+console.log( m2.data ); // [ [1, 2], [3, 4], [5, 6] ]
+
+// to plain array
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.toArray();
+console.log( m2 ); // [ [1, 2], [3, 4], [5, 6] ]
 ```
 
 
