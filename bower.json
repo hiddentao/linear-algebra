@@ -1,7 +1,7 @@
 {
   "name": "linear-algebra",
   "main": "dist/linear-algebra.js",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "authors": [
     "Ramesh Nair <ram@hiddentao.com>"
   ],
