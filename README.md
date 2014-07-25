@@ -111,6 +111,12 @@ m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
 m3 = m.mul(m2);
 console.log(m3.data);    // [ [10, 40], [90, 160], [250, 360] ]
 
+// divide corresponding elements
+m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
+m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m3 = m.div(m2);
+console.log(m3.data);    // [ [10, 10], [10, 10], [10, 10] ]
+
 // add corresponding elements
 m = new Matrix([ [10, 20], [30, 40], [50, 60] ]);
 m2 = new Matrix([ [1, 2], [3, 4], [5, 6] ]);

@@ -92,7 +92,7 @@ Matrix.prototype.trans_ = function() {
 
 
 
-
+BUILD(ALGEBRA_OP, div, thisData[row][col] / op2Data[row][col])
 BUILD(ALGEBRA_OP, mul, thisData[row][col] * op2Data[row][col])
 BUILD(ALGEBRA_OP, plus, thisData[row][col] + op2Data[row][col])
 BUILD(ALGEBRA_OP, minus, thisData[row][col] - op2Data[row][col])

@@ -247,6 +247,7 @@ module.exports = function(linAlg, options) {
   };
 
   var otherBinaryAlgebraOps = {
+    div: function(v1, v2) { return v1 / v2 },
     mul: function(v1, v2) { return v1 * v2 },
     plus: function(v1, v2) { return v1 + v2 },
     minus: function(v1, v2) { return v1 - v2 },
