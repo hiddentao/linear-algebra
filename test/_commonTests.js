@@ -386,6 +386,174 @@ module.exports = function(linAlg, options) {
 
         stub.callCount.should.eql(6);          
       }
+    },
+    'eleMap': {
+      'default': {
+        'row transform': function() {
+          var stub = this.mocker.spy(function(v, row, col) {
+            switch (row){
+              case 0: return v * 2;
+              case 1: return v * 3;
+              default: return v * 10;
+            }
+          });
+          
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap(stub);
+          m2.should.not.eql(m);
+
+          m2.data.should.not.eql(m.data);
+          m2.data.should.eql([ [2, 4, 6], [12, 15, 18], [70, 80, 90] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        },
+        'column transform': function() {
+          var stub = this.mocker.spy(function(v, row, col) {
+            switch (col) {
+              case 0: return v * 2;
+              case 1: return v * 3;
+              default: return v * 10;
+            }
+          });
+
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap(stub);
+          m2.should.not.eql(m);
+
+          m2.data.should.not.eql(m.data);
+          m2.data.should.eql([ [2, 6, 30], [8, 15, 60], [14, 24, 90] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        },
+        'element transform': function() {
+          var stub = this.mocker.spy(function(v, row, col) {
+            switch (row) {
+              case 0:
+                //First row
+                switch (col) {
+                  case 0: return v + 1;
+                  case 1: return v + 2;
+                  default: return v + 3;
+                }
+              case 1:
+                //Second row
+                switch (col) {
+                  case 0: return v;
+                  case 1: return v * 2;
+                  default: return v * 3;
+                }
+              default:
+                // All other rows
+                switch (col) {
+                  case 0: return v - 1;
+                  case 1: return v - 2;
+                  default: return v -3;
+                }
+            }
+          });
+
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap(stub);
+          m2.should.not.eql(m);
+
+          m2.data.should.not.eql(m.data);
+          m2.data.should.eql([ [2, 4, 6], [4, 10, 18], [6, 6, 6] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        }
+      },
+      'in-place': {
+        'row transform': function() {
+          var stub = this.mocker.spy(function(v, row, col) {
+            switch (row){
+              case 0: return v * 2;
+              case 1: return v * 3;
+              default: return v * 10;
+            }
+          });
+          
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap_(stub);
+          m2.should.eql(m);
+
+          m2.data.should.eql(m.data);
+          m2.data.should.eql([ [2, 4, 6], [12, 15, 18], [70, 80, 90] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        },
+        'column transform': function() {
+           var stub = this.mocker.spy(function(v, row, col) {
+            switch (col) {
+              case 0: return v * 2;
+              case 1: return v * 3;
+              default: return v * 10;
+            }
+          });
+
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap_(stub);
+          m2.should.eql(m);
+
+          m2.data.should.eql(m.data);
+          m2.data.should.eql([ [2, 6, 30], [8, 15, 60], [14, 24, 90] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        },
+        'element transform': function() {
+          var stub = this.mocker.spy(function(v, row, col) {
+            switch (row) {
+              case 0:
+                //First row
+                switch (col) {
+                  case 0: return v + 1;
+                  case 1: return v + 2;
+                  default: return v + 3;
+                }
+              case 1:
+                //Second row
+                switch (col) {
+                  case 0: return v;
+                  case 1: return v * 2;
+                  default: return v * 3;
+                }
+              default:
+                //All other rows
+                switch (col) {
+                  case 0: return v - 1;
+                  case 1: return v - 2;
+                  default: return v -3;
+                }
+            }
+          });
+
+          var m = new this.Matrix([ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]);
+
+          var m2 = m.eleMap_(stub);
+          m2.should.eql(m);
+
+          m2.data.should.eql(m.data);
+          m2.data.should.eql([ [2, 4, 6], [4, 10, 18], [6, 6, 6] ]);
+          m2.rows.should.eql(3);
+          m2.cols.should.eql(3);
+
+          stub.callCount.should.eql(9);
+        }
+      }
     }
   }
   
