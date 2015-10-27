@@ -17,6 +17,12 @@ mathOp = (name, expr, param) ->
     .replace(/PARAM/g, param)
     .replace(/'EXPR'/g, expr)
 
+eleMathOp = (name, expr, exprVar1, exprVar2, param) ->
+  mathOpTempl
+    .replace(/NAME/g, name)
+    .replace(/PARAM/g, param)
+    .replace(/'EXPR'/g, expr + ", " + exprVar1 + ", " + exprVar2)
+
 
 
 module.exports = (fullStr, macroComps) ->
@@ -27,6 +33,8 @@ module.exports = (fullStr, macroComps) ->
       return algebraOp(tokens[1], tokens[2])
     when 'MATH_OP'
       return mathOp(tokens[1], tokens[2], tokens[3])
+    when 'ELE_MATH_OP'
+      return eleMathOp(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5])
     else
       throw new Error('Unrecognized PRAGMA macro')
 
