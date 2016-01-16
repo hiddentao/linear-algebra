@@ -17,7 +17,7 @@ Features:
 
 ## Installation
 
-### node.js
+### CommonJS
 
 Install using [npm](http://npmjs.org/):
 
@@ -25,9 +25,7 @@ Install using [npm](http://npmjs.org/):
 
 ### Browser
 
-Use [bower](https://github.com/bower/bower):
-
-    $ bower install linear-algebra
+Include `dist/linear-algebra.js` script into your HTML.
 
 In the browser the library is exposed via the `linearAlgebra()` function.
 
