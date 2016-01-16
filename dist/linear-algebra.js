@@ -828,6 +828,53 @@ Matrix.prototype.plusEach_ = function(value) {
 
 
 
+/**
+ * Apply function with row and column parameters to all elements in matrix
+ *
+ * Used to apply different transformations depending on placement in matrix.
+ */
+Matrix.prototype.eleMap = function(transformFn) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col, result = new Array(rows);
+
+  for (row=0; row<rows; ++row) {
+    result[row] = new Array(cols);
+
+    for (col=0; col<cols; ++col) {
+      result[row][col] = transformFn(thisData[row][col], row, col);
+    }
+  }  
+
+  return new Matrix(result);
+};
+
+
+
+
+
+Matrix.prototype.eleMap_ = function(transformFn) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = transformFn(thisData[row][col], row, col);
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
 
 
     return LinAlg;
