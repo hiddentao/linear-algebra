@@ -31,3 +31,10 @@ BUILD(MATH_OP, mulEach, thisData[row][col] * value, value)
  * @param  {Number} value Value to multiple with.
  */
 BUILD(MATH_OP, plusEach, thisData[row][col] + value, value)
+
+/**
+ * Apply function with row and column parameters to all elements in matrix
+ *
+ * Used to apply different transformations depending on placement in matrix.
+ */
+BUILD(ELE_MATH_OP, eleMap, transformFn(thisData[row][col], row, col), transformFn)
