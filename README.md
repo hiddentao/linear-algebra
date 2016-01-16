@@ -157,6 +157,13 @@ m2 = m.map(function(v) {
 });
 console.log(m2.data);    // [ [0, 1], [2, 3], [4, 5] ]
 
+// any function with row and column passed-in
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+m2 = m.eleMap(function(v, row, col) {
+    return (0 === row && 1 === col ? v : v * 2 + 1);    
+});
+console.log(m2.data);    // [ [1, 1], [7, 9], [11, 13] ]
+
 
 /* Calculations */
 
