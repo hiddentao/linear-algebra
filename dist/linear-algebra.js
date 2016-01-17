@@ -264,6 +264,53 @@ Matrix.prototype.trans_ = function() {
 
 
 
+/**
+ * Log this matrix.
+ * @return {Matrix}
+ */
+Matrix.prototype.log = function() {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col, result = new Array(cols);
+
+  for (row=0; row<rows; ++row) {
+    result[row] = new Array(cols);
+
+    for (col=0; col<cols; ++col) {
+      result[row][col] = Math.log(thisData[row][col]);
+    }
+  }
+
+  return new Matrix(result);
+};
+
+
+
+/**
+ * In-place version of log().
+ * @return this
+ */
+Matrix.prototype.log_ = function() {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = Math.log(thisData[row][col]);
+    }
+  }
+
+  return this;
+};
+
+
+
+
 Matrix.prototype.div = function(op2) {
   var thisData = this.data,
     rows = this.rows, 
