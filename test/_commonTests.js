@@ -345,6 +345,22 @@ module.exports = function(linAlg, options) {
 
       m.getSum().should.eql(expected);
     },
+    'getMax': function() {
+      var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
+      m.getMax().should.eql(6);
+    },
+    'getMin': function() {
+      var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
+      m.getMin().should.eql(1);
+    },
+    'getArgMax': function() {
+      var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
+      m.getArgMax().should.eql(5);
+    },
+    'getArgMin': function() {
+      var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
+      m.getArgMin().should.eql(0);
+    },
   };
 
 
