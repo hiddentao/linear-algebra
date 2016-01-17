@@ -19,6 +19,24 @@ BUILD(MATH_OP, log, Math.log(thisData[row][col]))
  */
 BUILD(MATH_OP, sigmoid, (1 / (1 + Math.exp(-thisData[row][col]))))
 
+var n2n = function(value) {
+  if (isNaN(value)) {
+    return 0;
+  } else if (value === Number.POSITIVE_INFINITY) {
+    return Number.MAX_VALUE;
+  } else if (value === Number.NEGATIVE_INFINITY) {
+    return -Number.MAX_VALUE;
+  } else {
+    return value;
+  }
+}
+
+/**
+ * Calculate the nanToNum function of all the elements.
+ */
+BUILD(MATH_OP, nanToNum, n2n(thisData[row][col]))
+
+
 /**
  * Multiply every element with given value.
  * @param  {Number} value Value to multiple with.

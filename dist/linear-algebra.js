@@ -735,6 +735,64 @@ Matrix.prototype.sigmoid_ = function(undefined) {
 
 
 
+var n2n = function(value) {
+  if (isNaN(value)) {
+    return 0;
+  } else if (value === Number.POSITIVE_INFINITY) {
+    return Number.MAX_VALUE;
+  } else if (value === Number.NEGATIVE_INFINITY) {
+    return -Number.MAX_VALUE;
+  } else {
+    return value;
+  }
+}
+
+/**
+ * Calculate the nanToNum function of all the elements.
+ */
+Matrix.prototype.nanToNum = function(undefined) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col, result = new Array(rows);
+
+  for (row=0; row<rows; ++row) {
+    result[row] = new Array(cols);
+
+    for (col=0; col<cols; ++col) {
+      result[row][col] = n2n(thisData[row][col]);
+    }
+  }  
+
+  return new Matrix(result);
+};
+
+
+
+
+
+Matrix.prototype.nanToNum_ = function(undefined) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var row, col;
+
+  for (row=0; row<rows; ++row) {
+    for (col=0; col<cols; ++col) {
+      thisData[row][col] = n2n(thisData[row][col]);
+    }
+  }  
+
+  return this;
+};
+
+
+
+
+
+
 /**
  * Multiply every element with given value.
  * @param  {Number} value Value to multiple with.
