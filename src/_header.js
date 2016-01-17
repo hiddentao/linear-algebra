@@ -154,7 +154,28 @@
         a[i][j] = 0;
       }
     }
+    return new Matrix(a);
+  };
 
+  /**
+   * Reshape a matrix.
+   * @param {Array} values 1D array (vector)
+   * @param {Number} rows Number of rows.
+   * @param {Number} cols Number of cols.
+   * @return {Matrix}
+   */
+  Matrix.reshapeFrom = function(values, rows, cols) {
+    var a = [];
+
+    if (values.length !== rows * cols) {
+      _throwError('value length is ' + values.length + ' and rows x cols is ' + rows * cols);
+    }
+
+    if (rows * cols === values.length) {
+      for (var i=0; i<values.length; i += cols) {
+        a.push(values.slice(i, cols + i));
+      }
+    }
     return new Matrix(a);
   };
 
