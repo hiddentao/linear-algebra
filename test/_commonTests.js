@@ -554,7 +554,34 @@ module.exports = function(linAlg, options) {
           stub.callCount.should.eql(9);
         }
       }
-    }
+    },
+    'nanToNum': {
+      'default': function() {
+        var a = [ [-Infinity, NaN, 0, Infinity] ];
+        var m = new this.Matrix(a);
+
+        var m2 = m.nanToNum();
+        m2.should.be.instanceOf(this.Matrix);
+        m2.should.not.eql(m);
+
+        m2.data.should.not.eql(m.data);
+        m2.data.should.eql([ [-Number.MAX_VALUE, 0, 0, Number.MAX_VALUE] ]);
+        m2.rows = 1;
+        m2.cols = 4;
+      },
+      'in-place': function() {
+        var a = [ [-Infinity, NaN, 0, Infinity] ];
+        var m = new this.Matrix(a);
+
+        var m2 = m.nanToNum_();
+        m2.should.eql(m);
+
+        m2.data.should.eql(m.data);
+        m2.data.should.eql([ [-Number.MAX_VALUE, 0, 0, Number.MAX_VALUE] ]);
+        m2.rows = 1;
+        m2.cols = 4;
+      }
+    },
   }
   
   var otherMathTransforms = {
