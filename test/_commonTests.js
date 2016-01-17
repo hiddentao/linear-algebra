@@ -165,6 +165,34 @@ module.exports = function(linAlg, options) {
       }
     },
 
+   'log': {
+      'default': function() {
+        var a = [ [1, 2], [3, 4] ];
+        var m = new this.Matrix(a);
+
+        var m2 = m.log();
+        m2.should.be.instanceOf(this.Matrix);
+        m2.should.not.eql(m);
+
+        m2.data.should.not.eql(m.data);
+        m2.data.should.eql([ [Math.log(1), Math.log(2)], [Math.log(3), Math.log(4)] ]);
+        m2.rows = 2;
+        m2.cols = 3;
+      },
+      'in-place': function() {
+        var a = [ [1, 2], [3, 4] ];
+        var m = new this.Matrix(a);
+
+        var m2 = m.log_();
+        m2.should.eql(m);
+
+        m2.data.should.eql(m.data);
+        m2.data.should.eql([ [Math.log(1), Math.log(2)], [Math.log(3), Math.log(4)]]);
+        m2.rows = 2;
+        m2.cols = 3;
+      }
+    },
+
     'dot': {
       'default': {
         'size mismatch': function() {
