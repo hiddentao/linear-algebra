@@ -262,7 +262,7 @@ module.exports = function(linAlg, options) {
           for (var i=0; i<3; ++i) {
             ret[i] = [];
 
-            for (var j=0; j<3; ++j) {
+            for (var j=0; j<4; ++j) {
               ret[i][j] = fnExpCalcFn(m.data[i][j], m2.data[i][j]);
             }
           }
@@ -285,8 +285,8 @@ module.exports = function(linAlg, options) {
           }).throws('linear-algebra: [' + fnName + '] op1 is 3 x 3 and op2 is 3 x 2');
         },
         'size match': function() {
-          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
-          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6], [0.5, 0.6, 0.7] ]);
+          var m = new this.Matrix([ [1, 2, 5, 7], [3, 4, 6, 7], [5, 6, 7, 7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5, 7], [3, 4, 6, 7], [0.5, 0.6, 0.7, 0.7] ]);
 
           var m3 = m[fnName](m2);
           m3.should.be.instanceOf(this.Matrix);
@@ -294,8 +294,10 @@ module.exports = function(linAlg, options) {
 
           m3.data.should.not.eql(m.data);
           m3.data.should.eql(this.buildExpArr(m, m2));
+          m3.rows.should.eql(3);
+          m3.cols.should.eql(4);
           m3.rows = 3;
-          m3.cols = 3;
+          m3.cols = 4;
         }
       },
       'in-place': {
@@ -313,17 +315,19 @@ module.exports = function(linAlg, options) {
           }).throws('linear-algebra: [' + fnName + '_] op1 is 3 x 3 and op2 is 3 x 2');
         },
         'size match': function() {
-          var m = new this.Matrix([ [1, 2, 5], [3, 4, 6], [5, 6, 7] ]);
+          var m = new this.Matrix([ [1, 2, 5, 7], [3, 4, 6, 7], [5, 6, 7, 7] ]);
           var mCopy = m.clone();
-          var m2 = new this.Matrix([ [1, 2, 5], [3, 4, 6], [0.5, 0.6, 0.7] ]);
+          var m2 = new this.Matrix([ [1, 2, 5, 7], [3, 4, 6, 7], [0.5, 0.6, 0.7, 0.7] ]);
 
           var m3 = m[fnName+'_'](m2);
           m3.should.eql(m);
 
           m3.data.should.eql(m.data);
           m3.data.should.eql(this.buildExpArr(mCopy, m2));
+          m3.rows.should.eql(3);
+          m3.cols.should.eql(4);
           m3.rows = 3;
-          m3.cols = 3;
+          m3.cols = 4;
         }
       }
     }
