@@ -139,6 +139,28 @@
 
 
   /**
+   * Create a matrix of zeros.
+   * @param {Integer} rows Number of rows.
+   * @param {Integer} bols Number of bols.
+   * @return {Matrix}
+   */
+  Matrix.zeros = function(rows, cols) {
+    var a = new Array(rows);
+
+    for (var i=0; i<rows; ++i) {
+      a[i] = []
+      for (var j=0; j<cols; ++j) {
+        a[i][j] = 0;
+      }
+    }
+
+    return new Matrix(a);
+  };
+
+
+
+
+  /**
    * Helpers to create vectors, i.e. matrices with a single row.
    */
   var Vector = LinAlg.Vector = {
