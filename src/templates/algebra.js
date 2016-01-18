@@ -10,7 +10,7 @@ Matrix.prototype.NAME = function(op2) {
     _throwSizeMismatchError('NAME', this, op2);
   }
   
-  var row, col, result = new Array(cols);
+  var row, col, result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols);

@@ -300,7 +300,7 @@ Matrix.prototype.div = function(op2) {
     _throwSizeMismatchError('div', this, op2);
   }
   
-  var row, col, result = new Array(cols);
+  var row, col, result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols);
@@ -354,7 +354,7 @@ Matrix.prototype.mul = function(op2) {
     _throwSizeMismatchError('mul', this, op2);
   }
   
-  var row, col, result = new Array(cols);
+  var row, col, result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols);
@@ -408,7 +408,7 @@ Matrix.prototype.plus = function(op2) {
     _throwSizeMismatchError('plus', this, op2);
   }
   
-  var row, col, result = new Array(cols);
+  var row, col, result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols);
@@ -462,7 +462,7 @@ Matrix.prototype.minus = function(op2) {
     _throwSizeMismatchError('minus', this, op2);
   }
   
-  var row, col, result = new Array(cols);
+  var row, col, result = new Array(rows);
 
   for (row=0; row<rows; ++row) {
     result[row] = new Array(cols);
