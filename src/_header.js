@@ -144,11 +144,12 @@
    * @param {Integer} bols Number of bols.
    * @return {Matrix}
    */
-  Matrix.zeros = function(rows, cols) {
+  Matrix.zero = function(rows, cols) {
     var a = new Array(rows);
 
     for (var i=0; i<rows; ++i) {
-      a[i] = []
+      a[i] = new Array(cols);
+      
       for (var j=0; j<cols; ++j) {
         a[i][j] = 0;
       }

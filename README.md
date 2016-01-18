@@ -85,6 +85,10 @@ console.log( m.data );     // [ [1,0,0], [0,1,0], [0,0,1] ]
 m = Matrix.scalar(3, 9);
 console.log( m.data );     // [ [9,0,0], [0,9,0], [0,0,9] ]
 
+// zeros
+m = Matrix.zero(3, 2);
+console.log( m.data );     // [ [0, 0], [0, 0], [0, 0] ]
+
 // vector (a 1-row matrix)
 m = Vector.zero(5);
 console.log( m.data );     // [ [0, 0, 0, 0, 0] ]

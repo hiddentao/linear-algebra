@@ -103,8 +103,9 @@ module.exports = function(linAlg, options) {
         m.should.be.instanceOf(this.Matrix);
         m.data.should.eql([ [9, 0, 0], [0, 9, 0], [0, 0, 9] ]);
     },
-    '.zeros': function() {
-      var m = this.Matrix.zeros(4, 3);
+
+    '.zero': function() {
+      var m = this.Matrix.zero(4, 3);
 
       m.should.be.instanceOf(this.Matrix);
       m.data.should.eql( [ [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0] ]);
