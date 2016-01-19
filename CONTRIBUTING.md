@@ -19,4 +19,5 @@ We will only accept a merge requests which meets the following criteria:
 * Keeps the code base clean and well structured
 * Contains functionality we think other users will benefit from too
 * Doesn't add unnessecary configuration options since they complicate future changes
+* Has updated the documentation for the project where necessary to document the new features and/or changes made
 
