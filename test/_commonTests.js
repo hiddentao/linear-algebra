@@ -121,7 +121,7 @@ module.exports = function(linAlg, options) {
           that.Matrix.reshapeFrom([1, 2, 3], 2, 2)
         }).throws('linear-algebra: value length is 3 and rows x cols is 4');
 
-    },
+    }
   };
     
   // algebra 
