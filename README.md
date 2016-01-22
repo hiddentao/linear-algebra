@@ -89,6 +89,10 @@ console.log( m.data );     // [ [9,0,0], [0,9,0], [0,0,9] ]
 m = Matrix.zero(3, 2);
 console.log( m.data );     // [ [0, 0], [0, 0], [0, 0] ]
 
+// reshape from array
+m = Matrix.reshapeFrom([1, 2, 3, 4, 5, 6], 2, 3);
+console.log( m.data );     // [ [1, 2, 3,], [4, 5, 6] ]
+
 // vector (a 1-row matrix)
 m = Vector.zero(5);
 console.log( m.data );     // [ [0, 0, 0, 0, 0] ]
