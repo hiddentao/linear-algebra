@@ -593,77 +593,6 @@ Matrix.prototype.getSum = function() {
  return sum;  
 };
 
-Matrix.prototype.getMax = function() {
- var thisData = this.data,
-   rows = this.rows,
-   cols = this.cols,
-   max = thisData[0][0];
-
- for (var i = 0; i<rows; ++i) {
-   for (var j = 0; j<cols; ++j) {
-     if (thisData[i][j] > max) {
-       max = thisData[i][j];
-     }
-   }
- }
-
- return max;
-};
-
-Matrix.prototype.getMin = function() {
- var thisData = this.data,
-   rows = this.rows,
-   cols = this.cols,
-   min = thisData[0][0];
-
- for (var i = 0; i<rows; ++i) {
-   for (var j = 0; j<cols; ++j) {
-     if (thisData[i][j] < min) {
-       min = thisData[i][j];
-     }
-   }
- }
-
- return min;
-};
-
-Matrix.prototype.getArgMax = function() {
- var thisData = this.data,
-   rows = this.rows,
-   cols = this.cols,
-   max = thisData[0][0],
-   idx = 0;
-
- for (var i = 0; i<rows; ++i) {
-   for (var j = 0; j<cols; ++j) {
-     if (thisData[i][j] > max) {
-       max = thisData[i][j];
-       idx = cols * i + j;
-     }
-   }
- }
-
- return idx;
-};
-
-Matrix.prototype.getArgMin = function() {
- var thisData = this.data,
-   rows = this.rows,
-   cols = this.cols,
-   min = thisData[0][0],
-   idx = 0;
-
- for (var i = 0; i<rows; ++i) {
-   for (var j = 0; j<cols; ++j) {
-     if (thisData[i][j] < min) {
-       min = thisData[i][j];
-       idx = cols * i + j;
-     }
-   }
- }
-
- return idx;
-};
 
 /**
  * Apply function to all elements in this matrix.
@@ -945,6 +874,213 @@ Matrix.prototype.eleMap_ = function(transformFn) {
 
 
 
+
+/**
+ * Get the maximum value of all the elements.
+ *
+ * @param {Integer} axis
+ */
+Matrix.prototype.getMax = function(axis) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var _getMax = function(that) {
+    var thisData = that.data,
+      rows = that.rows,
+      cols = that.cols;
+
+    var arr = new Array(rows);
+    for (var i = 0; i<rows; ++i) {
+      var val = thisData[i][0],
+        idx = 0;
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] > val) {
+          val = thisData[i][j];
+          idx = j;
+        }
+      }
+      arr[i] = val;
+    }
+    return arr;
+  }
+
+  if (axis === 0) {
+    return _getMax(this);
+  } else if (axis === 1) {
+    return _getMax(this.trans());
+  } else if (axis === null || axis === undefined) {
+    var val = thisData[0][0],
+      idx = 0;
+    for (var i = 0; i<rows; ++i) {
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] > val) {
+          val = thisData[i][j];
+          idx = cols * i + j
+        }
+      }
+    }
+    return val;
+  } else {
+    _throwError('[getMax] axis is ' + axis);
+  }
+};
+
+
+/**
+ * Get the mininum value of all the elements.
+ *
+ * @param {Integer} axis
+ */
+Matrix.prototype.getMin = function(axis) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var _getMin = function(that) {
+    var thisData = that.data,
+      rows = that.rows,
+      cols = that.cols;
+
+    var arr = new Array(rows);
+    for (var i = 0; i<rows; ++i) {
+      var val = thisData[i][0],
+        idx = 0;
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] < val) {
+          val = thisData[i][j];
+          idx = j;
+        }
+      }
+      arr[i] = val;
+    }
+    return arr;
+  }
+
+  if (axis === 0) {
+    return _getMin(this);
+  } else if (axis === 1) {
+    return _getMin(this.trans());
+  } else if (axis === null || axis === undefined) {
+    var val = thisData[0][0],
+      idx = 0;
+    for (var i = 0; i<rows; ++i) {
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] < val) {
+          val = thisData[i][j];
+          idx = cols * i + j
+        }
+      }
+    }
+    return val;
+  } else {
+    _throwError('[getMin] axis is ' + axis);
+  }
+};
+
+
+/**
+ * Get the argument of maximum value of all the elements.
+ *
+ * @param {Integer} axis
+ */
+Matrix.prototype.getArgMax = function(axis) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var _getArgMax = function(that) {
+    var thisData = that.data,
+      rows = that.rows,
+      cols = that.cols;
+
+    var arr = new Array(rows);
+    for (var i = 0; i<rows; ++i) {
+      var val = thisData[i][0],
+        idx = 0;
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] > val) {
+          val = thisData[i][j];
+          idx = j;
+        }
+      }
+      arr[i] = idx;
+    }
+    return arr;
+  }
+
+  if (axis === 0) {
+    return _getArgMax(this);
+  } else if (axis === 1) {
+    return _getArgMax(this.trans());
+  } else if (axis === null || axis === undefined) {
+    var val = thisData[0][0],
+      idx = 0;
+    for (var i = 0; i<rows; ++i) {
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] > val) {
+          val = thisData[i][j];
+          idx = cols * i + j
+        }
+      }
+    }
+    return idx;
+  } else {
+    _throwError('[getArgMax] axis is ' + axis);
+  }
+};
+
+
+/**
+ * Get the argument of minimum value of all the elements.
+ *
+ * @param {Integer} axis
+ */
+Matrix.prototype.getArgMin = function(axis) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
+  var _getArgMin = function(that) {
+    var thisData = that.data,
+      rows = that.rows,
+      cols = that.cols;
+
+    var arr = new Array(rows);
+    for (var i = 0; i<rows; ++i) {
+      var val = thisData[i][0],
+        idx = 0;
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] < val) {
+          val = thisData[i][j];
+          idx = j;
+        }
+      }
+      arr[i] = idx;
+    }
+    return arr;
+  }
+
+  if (axis === 0) {
+    return _getArgMin(this);
+  } else if (axis === 1) {
+    return _getArgMin(this.trans());
+  } else if (axis === null || axis === undefined) {
+    var val = thisData[0][0],
+      idx = 0;
+    for (var i = 0; i<rows; ++i) {
+      for (var j = 0; j<cols; ++j) {
+        if (thisData[i][j] < val) {
+          val = thisData[i][j];
+          idx = cols * i + j
+        }
+      }
+    }
+    return idx;
+  } else {
+    _throwError('[getArgMin] axis is ' + axis);
+  }
+};
 
 
 
