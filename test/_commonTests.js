@@ -352,11 +352,11 @@ module.exports = function(linAlg, options) {
       },
       'with axis 0': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getMax(0).should.eql([3, 6]);
+        m.getMax(0).should.eql([4, 5, 6]);
       },
       'with axis 1': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getMax(1).should.eql([4, 5, 6]);
+        m.getMax(1).should.eql([3, 6]);
       },
     },
     'getMin': {
@@ -366,11 +366,11 @@ module.exports = function(linAlg, options) {
       },
       'with axis 0': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getMin(0).should.eql([1, 4]);
+        m.getMin(0).should.eql([1, 2, 3]);
       },
       'with axis 1': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getMin(1).should.eql([1, 2, 3]);
+        m.getMin(1).should.eql([1, 4]);
       },
     },
     'getArgMax': {
@@ -380,11 +380,11 @@ module.exports = function(linAlg, options) {
       },
       'with axis 0': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getArgMax(0).should.eql([2, 2]);
+        m.getArgMax(0).should.eql([1, 1, 1]);
       },
       'with axis 1': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getArgMax(1).should.eql([1, 1, 1]);
+        m.getArgMax(1).should.eql([2, 2]);
       },
     },
     'getArgMin': {
@@ -394,11 +394,11 @@ module.exports = function(linAlg, options) {
       },
       'with axis 0': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getArgMin(0).should.eql([0, 0]);
+        m.getArgMin(0).should.eql([0, 0, 0]);
       },
       'with axis 1': function() {
         var m = new this.Matrix([ [1, 2, 3], [4, 5, 6] ]);
-        m.getArgMin(1).should.eql([0, 0, 0]);
+        m.getArgMin(1).should.eql([0, 0]);
       },
     },
   };

@@ -927,9 +927,9 @@ Matrix.prototype.getMax = function(axis) {
   }
 
   if (axis === 0) {
-    return _getMax(this);
-  } else if (axis === 1) {
     return _getMax(this.trans());
+  } else if (axis === 1) {
+    return _getMax(this);
   } else if (axis === null || axis === undefined) {
     var val = thisData[0][0],
       idx = 0;
@@ -979,9 +979,9 @@ Matrix.prototype.getMin = function(axis) {
   }
 
   if (axis === 0) {
-    return _getMin(this);
-  } else if (axis === 1) {
     return _getMin(this.trans());
+  } else if (axis === 1) {
+    return _getMin(this);
   } else if (axis === null || axis === undefined) {
     var val = thisData[0][0],
       idx = 0;
@@ -1031,9 +1031,9 @@ Matrix.prototype.getArgMax = function(axis) {
   }
 
   if (axis === 0) {
-    return _getArgMax(this);
-  } else if (axis === 1) {
     return _getArgMax(this.trans());
+  } else if (axis === 1) {
+    return _getArgMax(this);
   } else if (axis === null || axis === undefined) {
     var val = thisData[0][0],
       idx = 0;
@@ -1083,9 +1083,9 @@ Matrix.prototype.getArgMin = function(axis) {
   }
 
   if (axis === 0) {
-    return _getArgMin(this);
-  } else if (axis === 1) {
     return _getArgMin(this.trans());
+  } else if (axis === 1) {
+    return _getArgMin(this);
   } else if (axis === null || axis === undefined) {
     var val = thisData[0][0],
       idx = 0;

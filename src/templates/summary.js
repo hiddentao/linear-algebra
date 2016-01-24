@@ -24,9 +24,9 @@ Matrix.prototype.NAME = function(axis) {
   }
 
   if (axis === 0) {
-    return _NAME(this);
-  } else if (axis === 1) {
     return _NAME(this.trans());
+  } else if (axis === 1) {
+    return _NAME(this);
   } else if (axis === null || axis === undefined) {
     var val = thisData[0][0],
       idx = 0;
