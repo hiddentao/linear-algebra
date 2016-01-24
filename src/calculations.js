@@ -1,4 +1,8 @@
 Matrix.prototype.getSum = function(axis) {
+  var thisData = this.data,
+    rows = this.rows,
+    cols = this.cols;
+
   var _getSum = function(that) {
     var thisData = that.data,
       rows = that.rows,
@@ -16,14 +20,15 @@ Matrix.prototype.getSum = function(axis) {
   };
 
   if (axis === 0) {
-    return new Matrix(_getSum(this.trans()));
+    return _getSum(this.trans());
   } else if (axis === 1) {
-    return new Matrix(_getSum(this));
+    return _getSum(this);
   } else if (axis === null || axis === undefined) {
-    var arr = _getSum(this);
     var sum = 0;
-    for (var i = 0; i<arr.length; ++i) {
-      sum += arr[i];
+    for (var i = 0; i<rows; ++i) {
+      for (var j = 0; j<cols; ++j) {
+        sum += thisData[i][j];
+      }
     }
     return sum;
   } else {
