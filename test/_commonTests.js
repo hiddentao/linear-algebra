@@ -356,17 +356,50 @@ module.exports = function(linAlg, options) {
   // calculations
 
   test['Matrix']['calculations'] = {
-    'getSum': function() {
-      var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+    'getSum': {
+      'without axis': function() {
+        var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
 
-      var expected;
-      if (options.adder) {
-        expected = options.adder([0.1, 0.2, 0.5, 0.3, 1.4, 1.6]);
-      } else {
-        expected = 0.1 + 0.2 + 0.5 + 0.3 + 1.4 + 1.6;
-      }
+        var expected;
+        if (options.adder) {
+          expected = options.adder([0.1, 0.2, 0.5, 0.3, 1.4, 1.6]);
+        } else {
+          expected = 0.1 + 0.2 + 0.5 + 0.3 + 1.4 + 1.6;
+        }
 
-      m.getSum().should.eql(expected);
+        m.getSum().should.eql(expected);
+      },
+      'with axis 0': function() {
+        var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+
+        var expected;
+        if (options.adder) {
+          expected = new this.Matrix([options.adder([0.1, 0.3]), options.adder([0.2, 1.4]), options.adder([0.5, 1.6])]);
+        } else {
+          expected = new this.Matrix([(0.1 + 0.3), (0.2 + 1.4), (0.5 + 1.6)]);
+        }
+
+        m.getSum(0).should.eql(expected);
+      },
+      'with axis 1': function() {
+        var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+
+        var expected;
+        if (options.adder) {
+          expected = new this.Matrix([options.adder([0.1, 0.2, 0.5]), options.adder([0.3, 1.4, 1.6])]);
+        } else {
+          expected = new this.Matrix([(0.1 + 0.2 + 0.5), (0.3 + 1.4 + 1.6)]);
+        }
+
+        m.getSum(1).should.eql(expected);
+      },
+      'with axis 2': function() {
+        var m = new this.Matrix([ [0.1, 0.2, 0.5], [0.3, 1.4, 1.6] ]);
+
+        expect(function() {
+          m.getSum(2)
+        }).throws('linear-algebra: [getSum] axis is 2');
+      },
     },
   };
 
