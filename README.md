@@ -56,11 +56,11 @@ var m = new Matrix([ [1, 2, 3], [4, 5, 6] ]);
 
 // default
 var m2 = m.mulEach(5);   // multiply every element by 5
-m2 === m1;  // false
+m2 === m;  // false
 
 // in-place
 var m2 = m.mulEach_(5); // notice the _ suffix
-m2 === m1;  // true
+m2 === m;  // true
 ```
 
 Using the in-place version of a method may not always yield a performance improvement. You can run the [performance benchmarks](#performance) to see examples of this.
