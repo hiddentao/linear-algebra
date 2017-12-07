@@ -67,14 +67,8 @@ export class Matrix {
     return this
   }
 
-  _assertCanBroadcast (val) {
-    if (val._rows !== this._rows) {
-      throw new Error(`Broadcast matrix has ${val._rows} rows instead of ${this._rows}`)
-    }
-
-    if (val._cols !== 1 && val._cols !== this._cols) {
-      throw new Error(`Broadcast matrix has ${val._cols} columns instead of 1 or ${this._cols}`)
-    }
+  toArray () {
+    return [].concat(this._array)
   }
 }
 
@@ -86,21 +80,27 @@ export class Matrix {
   ['divideBy', '/']
 ].forEach(([ methodName, operator ]) => {
   Matrix.prototype[methodName] = Function('val', `
-    if (val.isMatrix) {
-      this._assertCanBroadcast(val)
+    if (val && val.isMatrix) {
+      if (val._rows !== this._rows) {
+        throw new Error(\`Broadcast matrix has \${val._rows} rows instead of \${this._rows}\`)
+      }
 
       if (1 === val._cols) {
         for (let i = 0; i < this._array.length; ++i) {
-          this._array[val] ${operator}= val[i % this._rows]
+          this._array[i] ${operator}= val._array[i % this._rows]
         }
       } else {
+        if (val._cols !== this._cols) {
+          throw new Error(\`Broadcast matrix has \${val._cols} columns instead of 1 or \${this._cols}\`)
+        }
+
         for (let i = 0; i < this._array.length; ++i) {
-          this._array[val] ${operator}= val[i]
+          this._array[i] ${operator}= val._array[i]
         }
       }
     } else {
       for (let i = 0; i < this._array.length; ++i) {
-        this._array[val] ${operator}= val
+        this._array[i] ${operator}= val
       }
     }
 
