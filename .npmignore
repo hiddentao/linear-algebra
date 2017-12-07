@@ -1,3 +1,7 @@
-test.js
-gulpfile.js
-.*
+src/
+.gitignore
+.babelrc
+.eslintrc
+.eslintignore
+.travis.yml
+npm-debug.log

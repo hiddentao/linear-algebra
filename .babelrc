@@ -1,0 +1,13 @@
+{
+  "presets": [ "env" ],
+  "plugins": [
+    "transform-object-rest-spread"
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "babel-jest-assertions"
+      ]
+    }
+  }
+}

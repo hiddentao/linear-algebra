@@ -5,19 +5,18 @@ branches:
     - master
 
 node_js:
-  - "0.10"
-  - "0.11"
+  - "lts/*"
+  - "node"
 
-branches:
-  only:
-    - master
-
-before_script:
-  - "npm install -g gulp"
-  - "npm install"
+cache:
+  yarn: true
+  directories:
+    - node_modules
 
 script:
-  - "npm run build"
+  - "yarn lint"
+  - "yarn test:coverage"
+  - "yarn build"
 
 notifications:
   email:
