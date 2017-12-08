@@ -55,12 +55,16 @@ export class Matrix {
     return new Matrix(a, rows, cols);
   }
 
-  get rows() {
+  rows () {
     return this._rows
   }
 
-  get cols() {
+  cols () {
     return this._cols
+  }
+
+  get (row, col) {
+    return this._array[col * this._rows + row]
   }
 
   toArray () {
@@ -70,6 +74,14 @@ export class Matrix {
   fn (fn) {
     for (let i = 0; i < this._array.length; ++i) {
       this._array[i] = fn(this._array[i], i % this._rows, ~~(i / this._rows))
+    }
+
+    return this
+  }
+
+  each (cb) {
+    for (let i = 0; i < this._array.length; ++i) {
+      cb(this._array[i], i % this._rows, ~~(i / this._rows))
     }
 
     return this

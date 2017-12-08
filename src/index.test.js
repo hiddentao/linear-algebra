@@ -4,17 +4,28 @@ import { Matrix, trans, sum, clone } from './'
 
 
 describe('Matrix', () => {
-  describe('accessors', () => {
+  describe('getters', () => {
     it('.rows() returns no. of rows', () => {
       const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
 
-      expect(m.rows).toEqual(2)
+      expect(m.rows()).toEqual(2)
     })
 
     it('.cols() returns no. of columns', () => {
       const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
 
-      expect(m.cols).toEqual(3)
+      expect(m.cols()).toEqual(3)
+    })
+
+    it('.get() returns value at 0-based row, column', () => {
+      const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+      expect(m.get(0, 0)).toEqual(1)
+      expect(m.get(0, 1)).toEqual(3)
+      expect(m.get(0, 2)).toEqual(5)
+      expect(m.get(1, 0)).toEqual(2)
+      expect(m.get(1, 1)).toEqual(4)
+      expect(m.get(1, 2)).toEqual(6)
     })
   })
 
@@ -52,7 +63,7 @@ describe('Matrix', () => {
 
     it('maps a given function to every element', () => {
       const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-      const fn = jest.fn()
+      const fn = jest.fn(v => v * 2.5)
 
       m.fn(fn)
 
@@ -63,15 +74,34 @@ describe('Matrix', () => {
       expect(fn).toHaveBeenCalledWith(4, 1, 1)
       expect(fn).toHaveBeenCalledWith(5, 0, 2)
       expect(fn).toHaveBeenCalledWith(6, 1, 2)
-    })
-
-    it('assigns function return value to every element', () => {
-      const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-      const fn = jest.fn(val => val * 2.5)
-
-      m.fn(fn)
 
       expect(m._array).toEqual([ 2.5, 5, 7.5, 10, 12.5, 15 ])
+    })
+  })
+
+  describe('.each()', () => {
+    it('returns itself', () => {
+      const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+      const fn = jest.fn()
+
+      expect(m.each(fn)).toBe(m)
+    })
+
+    it('invokes given callback for every element', () => {
+      const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+      const fn = jest.fn()
+
+      m.each(fn)
+
+      expect(fn).toHaveBeenCalledTimes(6)
+      expect(fn).toHaveBeenCalledWith(1, 0, 0)
+      expect(fn).toHaveBeenCalledWith(2, 1, 0)
+      expect(fn).toHaveBeenCalledWith(3, 0, 1)
+      expect(fn).toHaveBeenCalledWith(4, 1, 1)
+      expect(fn).toHaveBeenCalledWith(5, 0, 2)
+      expect(fn).toHaveBeenCalledWith(6, 1, 2)
+
+      expect(m._array).toEqual([ 1, 2, 3, 4, 5, 6 ])
     })
   })
 
