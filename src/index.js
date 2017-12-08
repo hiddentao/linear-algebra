@@ -1,3 +1,6 @@
+/**
+ * Data is stored column-wise in a single 1D Array
+ */
 export class Matrix {
   constructor (array, rows, cols) {
     // array must be valid
@@ -65,7 +68,15 @@ export class Matrix {
   }
 
   toArray () {
-    return [].concat(this._array)
+    return Array.from(this._array)
+  }
+
+  fn (fn) {
+    for (let i = 0; i < this._array.length; ++i) {
+      this._array[i] = fn(this._array[i], i % this._rows, ~~(i / this._rows))
+    }
+
+    return this
   }
 }
 
@@ -104,3 +115,46 @@ export class Matrix {
     return this
   `)
 })
+
+
+// export const sum = (m, axis = 0) => {
+//   if (0 === axis) {
+//     let ret = new Array(m._cols)
+//
+//     for (let i = 0; m._array.length > i; i += m._rows) {
+//       let sum = 0
+//
+//       for (let j = 0; m._rows > j; ++j) {
+//         sum += m._array[]
+//       }
+//       ret += m._array[i]
+//     }
+//   } else {
+//
+//   }
+//   let ret = 0
+//
+//
+//   return ret
+// }
+
+export const trans = m => {
+  const a = new Array(m._array.length)
+
+  for (let j = 0; j < m._cols; ++j) {
+    for (let i = 0; i < m._rows; ++i) {
+      a[i * m._cols + j] = m._array[j * m._rows + i]
+    }
+  }
+
+  return new Matrix(a, m._cols, m._rows)
+}
+
+
+// export const dot = (m1, m2) => {
+//   if (m1._cols !== m2._rows) {
+//     throw new Error(`Invalid dot product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
+//   }
+//
+//
+// }
