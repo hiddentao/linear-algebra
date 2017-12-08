@@ -1,6 +1,6 @@
 import each from 'jest-each'
 
-import { Matrix, trans, sum } from './'
+import { Matrix, trans, sum, clone } from './'
 
 
 describe('Matrix', () => {
@@ -19,17 +19,6 @@ describe('Matrix', () => {
   })
 
   describe('statics', () => {
-    it('.fromMatrix() returns a clone of given matrix', () => {
-      const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-
-      const m2 = Matrix.fromMatrix(m)
-
-      expect(m2._array).not.toBe(m._array)
-      expect(m2._array).toEqual(m._array)
-      expect(m2._rows).toEqual(m._rows)
-      expect(m2._cols).toEqual(m._cols)
-    })
-
     it('.zeros() returns a 0 matrix', () => {
       const m = Matrix.zero(2, 3)
 
@@ -151,6 +140,20 @@ describe('Matrix', () => {
   })
 })
 
+describe('.clone()', () => {
+  it('returns a clone of given matrix', () => {
+    const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    const m2 = clone(m)
+
+    expect(m2._array).not.toBe(m._array)
+    expect(m2._array).toEqual(m._array)
+    expect(m2._rows).toEqual(m._rows)
+    expect(m2._cols).toEqual(m._cols)
+  })
+})
+
+
 describe('.trans()', () => {
   it('transposes a matrix', () => {
     const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
@@ -182,6 +185,50 @@ describe('.trans()', () => {
     expect(m2).not.toBe(m)
     expect(m2._array).toEqual([ 1, 2, 3, 4, 5, 6 ])
     expect(m2._rows).toEqual(6)
+    expect(m2._cols).toEqual(1)
+  })
+})
+
+describe('.sum()', () => {
+  it('requires an axis', () => {
+    const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    try {
+      sum(m)
+    } catch (err) {
+      expect(err.message).toContain('Invalid axis: undefined')
+    }
+  })
+
+  it('requires a valid axis', () => {
+    const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    try {
+      sum(m, 'invalid')
+    } catch (err) {
+      expect(err.message).toContain('Invalid axis: invalid')
+    }
+  })
+
+  it('can sum columns', () => {
+    const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    const m2 = sum(m, 'columns')
+
+    expect(m2).not.toBe(m)
+    expect(m2._array).toEqual([ 3, 7, 11 ])
+    expect(m2._rows).toEqual(1)
+    expect(m2._cols).toEqual(3)
+  })
+
+  it('can sum rows', () => {
+    const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    const m2 = sum(m, 'rows')
+
+    expect(m2).not.toBe(m)
+    expect(m2._array).toEqual([ 9, 12 ])
+    expect(m2._rows).toEqual(2)
     expect(m2._cols).toEqual(1)
   })
 })

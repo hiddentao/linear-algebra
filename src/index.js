@@ -55,10 +55,6 @@ export class Matrix {
     return new Matrix(a, rows, cols);
   }
 
-  static fromMatrix(matrix) {
-    return new Matrix(matrix._array.concat([]), matrix._rows, matrix._cols)
-  }
-
   get rows() {
     return this._rows
   }
@@ -117,26 +113,51 @@ export class Matrix {
 })
 
 
-// export const sum = (m, axis = 0) => {
-//   if (0 === axis) {
-//     let ret = new Array(m._cols)
-//
-//     for (let i = 0; m._array.length > i; i += m._rows) {
-//       let sum = 0
-//
-//       for (let j = 0; m._rows > j; ++j) {
-//         sum += m._array[]
-//       }
-//       ret += m._array[i]
-//     }
-//   } else {
-//
-//   }
-//   let ret = 0
-//
-//
-//   return ret
-// }
+export const sum = (m, axis) => {
+  if ('columns' === axis) {
+    let ret = new Array(m._cols)
+
+    for (let col = 0; col < m._cols; ++col) {
+      let sum = 0
+
+      let index = col * m._rows
+      const endIndex = index + m._rows
+
+      while (endIndex > index) {
+        sum += m._array[index]
+
+        index++
+      }
+
+      ret[col] = sum
+    }
+
+    return new Matrix(ret, 1, m._cols)
+  } else if ('rows' === axis) {
+    let ret = new Array(m._rows)
+
+    for (let row = 0; row < m._rows; ++row) {
+      let sum = 0
+
+      let index = row
+      const endIndex = index + m._cols * m._rows
+
+      while (endIndex > index) {
+        sum += m._array[index]
+
+        index += m._rows
+      }
+
+      ret[row] = sum
+    }
+
+    return new Matrix(ret, m._rows, 1)
+  } else {
+    throw new Error(`Invalid axis: ${axis}`)
+  }
+}
+
+export const clone = m => new Matrix(Array.from(m._array), m._rows, m._cols)
 
 export const trans = m => {
   const a = new Array(m._array.length)
