@@ -52,19 +52,16 @@ export class Matrix {
     return new Matrix(a, rows, cols);
   }
 
-  static from(matrix) {
+  static fromMatrix(matrix) {
     return new Matrix(matrix._array.concat([]), matrix._rows, matrix._cols)
   }
 
-  reshape (rows, cols) {
-    if (rows * cols !== this._array.length) {
-      throw new Error(`Unable to reshape from ${this._rows} x ${this._cols} to ${rows} x ${cols}`)
-    }
+  get rows() {
+    return this._rows
+  }
 
-    this._rows = rows
-    this._cols = cols
-
-    return this
+  get cols() {
+    return this._cols
   }
 
   toArray () {
