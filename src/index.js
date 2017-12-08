@@ -184,10 +184,14 @@ export const trans = m => {
 }
 
 
-// export const dot = (m1, m2) => {
-//   if (m1._cols !== m2._rows) {
-//     throw new Error(`Invalid dot product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
-//   }
-//
-//
-// }
+export const dot = (m1, m2) => {
+  if (m1._cols !== m2._rows) {
+    throw new Error(`Invalid dot product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
+  }
+
+  const ret = new Array(m1._rows * m2._cols)
+
+  // TODO
+
+  return new Matrix(ret, m1._rows, m2._cols)
+}
