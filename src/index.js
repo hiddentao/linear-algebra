@@ -11,7 +11,7 @@ export class Matrix {
     // try and work out no. of rows and columns
     if (rows === undefined && cols === undefined) {
       if (!Array.isArray(array[0])) {
-        throw new Error('Array must be 2D if rows and cols omitted');
+        throw new Error('Array must be 2D if rows and cols omitted')
       }
 
       rows = array.length
@@ -21,11 +21,11 @@ export class Matrix {
     }
 
     if (1 > rows) {
-      throw new Error("Rows must be >= 1")
+      throw new Error('Rows must be >= 1')
     }
 
     if (1 > cols) {
-      throw new Error("Columns must be >= 1")
+      throw new Error('Columns must be >= 1')
     }
 
     if (array.length !== rows * cols) {
@@ -40,19 +40,19 @@ export class Matrix {
     this.isMatrix = true
   }
 
-  static zero(rows, cols) {
-    return new Matrix(new Array(rows * cols).fill(0), rows, cols);
+  static zero (rows, cols) {
+    return new Matrix(new Array(rows * cols).fill(0), rows, cols)
   }
 
-  static rand(rows, cols) {
-    const len = rows * cols;
+  static rand (rows, cols) {
+    const len = rows * cols
 
-    const a = new Array(len);
+    const a = new Array(len)
     for (let i = 0; len > i; ++i) {
-      a[i] = Math.random();
+      a[i] = Math.random()
     }
 
-    return new Matrix(a, rows, cols);
+    return new Matrix(a, rows, cols)
   }
 
   rows () {
@@ -65,6 +65,10 @@ export class Matrix {
 
   get (row, col) {
     return this._array[col * this._rows + row]
+  }
+
+  set (row, col, val) {
+    this._array[col * this._rows + row] = val
   }
 
   toArray () {
@@ -95,6 +99,7 @@ export class Matrix {
   ['times', '*'],
   ['divideBy', '/']
 ].forEach(([ methodName, operator ]) => {
+  // eslint-disable-next-line no-new-func
   Matrix.prototype[methodName] = Function('val', `
     if (val && val.isMatrix) {
       if (val._rows !== this._rows) {
@@ -174,24 +179,32 @@ export const clone = m => new Matrix(Array.from(m._array), m._rows, m._cols)
 export const trans = m => {
   const a = new Array(m._array.length)
 
-  for (let j = 0; j < m._cols; ++j) {
-    for (let i = 0; i < m._rows; ++i) {
-      a[i * m._cols + j] = m._array[j * m._rows + i]
-    }
+  for (let i = 0; i < m._array.length; ++i) {
+    a[(i % m._rows) * m._cols + ~~(i / m._rows)] = m._array[i]
   }
 
   return new Matrix(a, m._cols, m._rows)
 }
 
 
-export const dot = (m1, m2) => {
+export const product = (m1, m2) => {
   if (m1._cols !== m2._rows) {
-    throw new Error(`Invalid dot product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
+    throw new Error(`Invalid product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
   }
 
   const ret = new Array(m1._rows * m2._cols)
 
-  // TODO
+  for (let row = 0; m1._rows > row; ++row) {
+    let sum = 0
+    let col = 0
+
+    while (m1._cols > col) {
+      sum += m1._array[col * m1._rows + row] * m2._array[row * m2._cols + row]
+      ++col
+    }
+
+    ret[col * m1._rows + row] = sum
+  }
 
   return new Matrix(ret, m1._rows, m2._cols)
 }

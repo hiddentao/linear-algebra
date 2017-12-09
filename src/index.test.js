@@ -1,6 +1,6 @@
 import each from 'jest-each'
 
-import { Matrix, trans, sum, clone } from './'
+import { Matrix, trans, sum, product, clone } from './'
 
 
 describe('Matrix', () => {
@@ -110,63 +110,63 @@ describe('Matrix', () => {
       ['plus', [ 6, 7, 8, 9, 10, 11 ], [ 8, 11, 4, 4, 7, 9 ], [ 8, 11, 10, 13, 12, 15 ]],
       ['minus', [ -4, -3, -2, -1, 0, 1 ], [ -6, -7, 2, 4, 3, 3 ], [ -6, -7, -4, -5, -2, -3 ]],
       ['times', [ 5, 10, 15, 20, 25, 30 ], [ 7, 18, 3, 0, 10, 18 ], [ 7, 18, 21, 36, 35, 54 ]],
-      ['divideBy', [ 1/5, 2/5, 3/5, 4/5, 1, 6/5 ], [ 1/7, 2/9, 3/1, 4/0, 5/2, 6/3 ], [ 1/7, 2/9, 3/7, 4/9, 5/7, 6/9 ]],
+      ['divideBy', [ 1 / 5, 2 / 5, 3 / 5, 4 / 5, 1, 6 / 5 ], [ 1 / 7, 2 / 9, 3 / 1, 4 / 0, 5 / 2, 6 / 3 ], [ 1 / 7, 2 / 9, 3 / 7, 4 / 9, 5 / 7, 6 / 9 ]],
     ])
-    .describe('.%s()', (method, rbVal, rbN, rbOne) => {
-      it('returns itself', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+      .describe('.%s()', (method, rbVal, rbN, rbOne) => {
+        it('returns itself', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
 
-        expect(m[method](1)).toEqual(m)
-      })
+          expect(m[method](1)).toEqual(m)
+        })
 
-      it('can broadcast a number', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+        it('can broadcast a number', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
 
-        m[method](5)
+          m[method](5)
 
-        expect(m.toArray()).toEqual(rbVal)
-      })
+          expect(m.toArray()).toEqual(rbVal)
+        })
 
-      it('can broadcast an equally sized matrix', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-        const m2 = new Matrix([ 7, 9, 1, 0, 2, 3 ], 2, 3)
+        it('can broadcast an equally sized matrix', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+          const m2 = new Matrix([ 7, 9, 1, 0, 2, 3 ], 2, 3)
 
-        m[method](m2)
-
-        expect(m.toArray()).toEqual(rbN)
-      })
-
-      it('can broadcast a single column matrix', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-        const m2 = new Matrix([ 7, 9 ], 2, 1)
-
-        m[method](m2)
-
-        expect(m.toArray()).toEqual(rbOne)
-      })
-
-      it('throws error if broadcast matrix has different no. of rows', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-        const m2 = new Matrix([ 7, 9, 2 ], 3, 1)
-
-        try {
           m[method](m2)
-        } catch (err) {
-          expect(err.message).toContain('Broadcast matrix has 3 rows instead of 2')
-        }
-      })
 
-      it('throws error if broadcast matrix has neither 1 nor matching no. of columns', () => {
-        const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
-        const m2 = new Matrix([ 7, 9, 8, 4 ], 2, 2)
+          expect(m.toArray()).toEqual(rbN)
+        })
 
-        try {
+        it('can broadcast a single column matrix', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+          const m2 = new Matrix([ 7, 9 ], 2, 1)
+
           m[method](m2)
-        } catch (err) {
-          expect(err.message).toContain('Broadcast matrix has 2 columns instead of 1 or 3')
-        }
+
+          expect(m.toArray()).toEqual(rbOne)
+        })
+
+        it('throws error if broadcast matrix has different no. of rows', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+          const m2 = new Matrix([ 7, 9, 2 ], 3, 1)
+
+          try {
+            m[method](m2)
+          } catch (err) {
+            expect(err.message).toContain('Broadcast matrix has 3 rows instead of 2')
+          }
+        })
+
+        it('throws error if broadcast matrix has neither 1 nor matching no. of columns', () => {
+          const m = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+          const m2 = new Matrix([ 7, 9, 8, 4 ], 2, 2)
+
+          try {
+            m[method](m2)
+          } catch (err) {
+            expect(err.message).toContain('Broadcast matrix has 2 columns instead of 1 or 3')
+          }
+        })
       })
-    })
   })
 })
 
