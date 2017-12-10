@@ -83,6 +83,14 @@ export class Matrix {
     return this
   }
 
+  trans () {
+    for (let i = 0; i < this._array.length; ++i) {
+      this._array[(i % this._rows) * this._cols + ~~(i / this._rows)] = this._array[i]
+    }
+
+    return this
+  }
+
   each (cb) {
     for (let i = 0; i < this._array.length; ++i) {
       cb(this._array[i], i % this._rows, ~~(i / this._rows))
@@ -127,8 +135,14 @@ export class Matrix {
 
     return this
   `)
+
+  exports[methodName] = (m, val) => clone(m)[methodName](val)
 })
 
+
+export const clone = m => new Matrix(Array.from(m._array), m._rows, m._cols)
+
+export const trans = m => clone(m).trans()
 
 export const sum = (m, axis) => {
   if ('columns' === axis) {
@@ -174,22 +188,9 @@ export const sum = (m, axis) => {
   }
 }
 
-export const clone = m => new Matrix(Array.from(m._array), m._rows, m._cols)
-
-export const trans = m => {
-  const a = new Array(m._array.length)
-
-  for (let i = 0; i < m._array.length; ++i) {
-    a[(i % m._rows) * m._cols + ~~(i / m._rows)] = m._array[i]
-  }
-
-  return new Matrix(a, m._cols, m._rows)
-}
-
-
 export const product = (m1, m2) => {
   if (m1._cols !== m2._rows) {
-    throw new Error(`Invalid product: ${m1._rows} x ${m1._cols} . ${m2._rows} x ${m2._cols}`)
+    throw new Error(`Invalid product: ${m1._rows}x${m1._cols} . ${m2._rows}x${m2._cols}`)
   }
 
   const ret = new Array(m1._rows * m2._cols)
@@ -205,6 +206,8 @@ export const product = (m1, m2) => {
 
     ret[col * m1._rows + row] = sum
   }
+
+  console.log(ret, m1._rows, m2._cols)
 
   return new Matrix(ret, m1._rows, m2._cols)
 }

@@ -262,3 +262,29 @@ describe('.sum()', () => {
     expect(m2._cols).toEqual(1)
   })
 })
+
+describe('.product()', () => {
+  it('requires m1 columns to equal m2 rows', () => {
+    const m1 = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+    const m2 = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+
+    try {
+      product(m1, m2)
+    } catch (err) {
+      expect(err.message).toContain('Invalid product: 2x3 . 2x3')
+    }
+  })
+
+  it('calculates the dot product as a new matrix', () => {
+    const m1 = new Matrix([ 1, 2, 3, 4, 5, 6 ], 2, 3)
+    const m2 = new Matrix([ 7, 8, 9, 10, 11, 12 ], 3, 2)
+
+    const ret = product(m1, m2)
+
+    expect(ret).not.toBe(m1)
+    expect(ret).not.toBe(m2)
+    expect(ret._array).toEqual([ 76, 100, 103, 136 ])
+    expect(ret._cols).toEqual(2)
+    expect(ret._rows).toEqual(2)
+  })
+})
