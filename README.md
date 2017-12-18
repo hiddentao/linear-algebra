@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/hiddentao/linear-algebra.png)](http://travis-ci.org/hiddentao/linear-algebra)
 
+**NOTE: If you're serious about doing machine learning in the browser I recommend using [deeplearn.js](https://deeplearnjs.org/)**
+
 Efficient, high-performance linear algebra library for node.js and browsers.
 
 This is a low-level algebra library which supports basic vector and matrix operations, and has been designed with machine learning algorithms in mind.
@@ -196,7 +198,7 @@ console.log( m2 ); // [ [1, 2], [3, 4], [5, 6] ]
 
 ### Higher precision
 
-When adding floating point numbers together the end result is sometimes off by a minor decimal point (to see this try `0.1 + 0.2` in your JS console). 
+When adding floating point numbers together the end result is sometimes off by a minor decimal point (to see this try `0.1 + 0.2` in your JS console).
 
 This module allows you to supply a custom adder (e.g. [`add`](https://www.npmjs.org/package/add)) as an option to the initialization call.
 
@@ -246,7 +248,7 @@ $ npm install
 $ gulp benchmark
 ```
 
-Matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten. 
+Matrix operations which result in a new matrix are implemented as two methods - a default method which returns a new `Matrix` instance and an _in-place_ method which causes the original to be overwritten.
 
 The _in-place_ versions are provided because - general speaking- memory allocations and garbage collection are expensive operations you don't want happening when you're performing lots of calculations. Overwriting an existing array is [twice as fast](http://jsperf.com/create-new-array-vs-overwrite-existing) as creating a new one. And since changing the size of an array is also an expensive operation, even if a matrix operation results in a smaller matrix than before the internal array is kept at the same size:
 
