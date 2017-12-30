@@ -184,6 +184,17 @@ console.log(m.getSum());    // 21
 
 /* Other methods */
 
+// getting column as array
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+col = m.getCol(1);
+console.log( col ); // [1, 3, 5]
+
+// assigning array to column
+m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
+newCol = [67, 68, 69];
+m.setCol(1, newCol);
+console.log( m.data ); // [ [67, 2], [68, 4], [69, 6] ]
+
 // cloning
 m = new Matrix([ [1, 2], [3, 4], [5, 6] ]);
 m2 = m.clone();

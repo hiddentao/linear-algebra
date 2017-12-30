@@ -68,6 +68,51 @@
 
 
   /**
+   * Gets one column of the matrix as an array.
+   * @param {number} n The index (1-based) of the column.
+   * 
+   * @return {Array}
+   */
+  Matrix.prototype.getCol = function (n) {
+    if (typeof n !== 'number' || n < 1 || n > this.cols) {
+      _throwError('[setCol] n is out of bounds or of wrong type.');
+    }
+
+    return this.data.map(function (el) {
+        return el[n - 1];
+    });
+  }
+
+
+
+
+  /**
+   * Sets the values of one column.
+   * @param {number} n The index (1-based) of the column.
+   * @param {Array} col The array to become the new column.
+   * 
+   * @return {Array}
+   */
+  Matrix.prototype.setCol = function (n, col) {
+      if (typeof n !== 'number' || n < 1 || n > this.cols) {
+        _throwError('[setCol] n is out of bounds or of wrong type.');
+      }
+
+      if (col.length !== this.rows) {
+        _throwError('[setCol] tried to assign column of size '+ col.length + 
+          ' to matrix with ' + this.rows + ' rows.');
+      }
+
+      for (var i = 0; i < this.rows; i++) {
+        this.data[i][n - 1] = col[i];
+      }
+  };
+
+
+
+
+
+  /**
    * Clone this matrix.
    * @return {Matrix}
    */

@@ -35,6 +35,52 @@ module.exports = function(linAlg, options) {
       }
     },
 
+    'getCol': {
+      'correct n': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        var col = m.getCol(1);
+        col.should.eql([1, 3, 5]);
+      },
+      'out of bounds n': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        expect(function() { m.setCol(10) }).to.throw();
+      },
+      'n of wrong type': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        expect(function() { m.setCol('a') }).to.throw();
+      }
+    },
+
+    'setCol': {
+      'correct n and new col': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        var col = m.setCol(1, [30, 7, 40]);
+        m.data[0][0].should.eql(30);
+        m.data[1][0].should.eql(7);
+        m.data[2][0].should.eql(40);
+      },
+      'out of bounds n': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        expect(function() { m.setCol(10, [2, 3, 4]) }).to.throw();
+      },
+      'n of wrong type': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        expect(function() { m.setCol('a', [2, 3, 4]) }).to.throw();
+      },
+      'column of incorrect height': function () {
+        var a = [ [1, 2], [3, 4], [5, 6] ];
+        var m = new this.Matrix(a);
+        expect(function() { m.setCol(1, [3, 4]) }).to.throw();
+        expect(function() { m.setCol(1, [3, 4, 5, 6]) }).to.throw();
+      }
+    },
+
     'toArray': {
       'deep copy': function() {
         var a = [ [1, 2], [3, 4], [5, 6] ];
