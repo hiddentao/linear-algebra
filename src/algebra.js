@@ -10,18 +10,19 @@
  * @return {Matrix}
  */
 Matrix.prototype.trans = function() {
+
+  // data of this matrix
   var thisData = this.data,
-    rows = this.rows, 
-    cols = this.cols;
+    thisRows = this.rows, 
+    thisCols = this.cols;
 
-  var row, col;
+  var result = new Array(thisCols);
 
-  var result = new Array(cols);
-
-  for (col=0; col<cols; ++col) {
-    result[col] = new Array(rows);
+  // actual transpose procedure
+  for (var col=0; col < thisCols; ++col) {
+    result[col] = new Array(thisRows);
     
-    for (row=0; row<rows; ++row) {
+    for (var row=0; row < thisRows; ++row) {
       result[col][row] = thisData[row][col];
     }
   }
@@ -40,14 +41,14 @@ Matrix.prototype.trans = function() {
  */
 Matrix.prototype.trans_ = function() {
   var thisData = this.data,
-    rows = this.rows, 
-    cols = this.cols;
+    thisRows = this.rows, 
+    thisCols = this.cols;
 
   var row, col, t;
 
   // first we transpose the matrix upto length of shortest side
-  var isSquare = (cols === rows);
-  var shortestSide = (cols > rows) ? rows : cols;
+  var isSquare = (thisCols === thisRows);
+  var shortestSide = (thisCols > thisRows) ? thisRows : thisCols;
 
   for (row=0; row<shortestSide; ++row) {
     for (col=row + 1; col<shortestSide; ++col) {
@@ -59,30 +60,30 @@ Matrix.prototype.trans_ = function() {
 
   // now we transpose the rest of the matrix
   if (!isSquare) {
-    if (cols > rows) {
+    if (thisCols > thisRows) {
       // do a column at a time
-      for (col=rows; cols > col; ++col) {
+      for (col=thisRows; thisCols > col; ++col) {
         if (!Array.isArray(thisData[col])) {
-          thisData[col] = new Array(rows);
+          thisData[col] = new Array(thisRows);
         }
 
-        for (row=0; row<rows; ++row) {
+        for (row=0; row<thisRows; ++row) {
           thisData[col][row] = thisData[row][col];
         }
       }
     }
     else {
       // do a row at a time
-      for (row=cols; rows > row; ++row) {
-        for (col=0; cols > col; ++col) {
+      for (row=thisCols; thisRows > row; ++row) {
+        for (col=0; thisCols > col; ++col) {
           thisData[col][row] = thisData[row][col];
         }
       }
     }
     
     // finally, we update the "official" dimensions
-    t = rows;
-    this.rows = cols;
+    t = thisRows;
+    this.rows = thisCols;
     this.cols = t;
   }
 
