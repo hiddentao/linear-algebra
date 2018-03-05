@@ -16,15 +16,13 @@ Matrix.prototype.trans = function() {
     thisRows = this.rows, 
     thisCols = this.cols;
 
-  var row, col;
-
   var result = new Array(thisCols);
 
   // actual transpose procedure
-  for (col=0; col < thisCols; ++col) {
+  for (var col=0; col < thisCols; ++col) {
     result[col] = new Array(thisRows);
     
-    for (row=0; row < thisRows; ++row) {
+    for (var row=0; row < thisRows; ++row) {
       result[col][row] = thisData[row][col];
     }
   }
