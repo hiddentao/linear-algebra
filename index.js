@@ -1,6 +1,5 @@
 var normal = require('./dist/linear-algebra'),
-  precision = require('./dist/linear-algebra.precision');
-
+    precision = require('./dist/linear-algebra.precision');
 
 /** 
  * Initialise the library.
@@ -10,18 +9,8 @@ var normal = require('./dist/linear-algebra'),
  * 
  * @return {Object} Linear algebra primitives.
  */
-var linearAlgebra = module.exports = function(options) {
+var linearAlgebra = module.exports = (function(options) {
   options = options || {};
   
-  if (options.add) {
-    return linearAlgebra._precision(options);
-  } else {
-    return linearAlgebra._normal(options);
-  }
-};
-
-
-// to make testing easier
-linearAlgebra._normal = normal;
-linearAlgebra._precision = precision;
-
+  return(options.add ? precision(options) : normal(options));
+})();
