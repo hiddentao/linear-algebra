@@ -15,7 +15,12 @@ Matrix.prototype.getSum = function() {
 };
 
 Matrix.prototype.getInverse = function() {
-
+    var matrix = this.data,
+    rows = this.rows,
+    cols = this.cols;
+    if(cols != rows){
+      _throwError('matrix should be squared');
+    }
  };
  
  
