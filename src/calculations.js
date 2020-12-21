@@ -15,10 +15,12 @@ Matrix.prototype.getSum = function() {
 };
 
 Matrix.prototype.getInverse = function() {
-    var matrix = this.data,
+
+    var matrix = new Matrix(this.toArray());
     rows = this.rows,
     cols = this.cols;
     let temp;
+    
     if(cols != rows){
       _throwError('matrix should be squared');
     }
@@ -57,6 +59,7 @@ Matrix.prototype.getInverse = function() {
         matrix[i][j] = matrix[i][j] / temp;
     }
   }
+
 
  };
  
