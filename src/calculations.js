@@ -16,11 +16,11 @@ Matrix.prototype.getSum = function() {
 
 Matrix.prototype.getInverse = function() {
 
-    var matrix = new Matrix(this.toArray());
+    var matrix = this.data;
     rows = this.rows,
     cols = this.cols;
     let temp;
-    
+
     if(cols != rows){
       _throwError('matrix should be squared');
     }
@@ -60,7 +60,7 @@ Matrix.prototype.getInverse = function() {
     }
   }
 
-
+    return new Matrix(matrix);
  };
  
  
