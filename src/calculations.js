@@ -29,6 +29,16 @@ Matrix.prototype.getInverse = function() {
               matrix[i][j] = 1;
       }
   }
+
+  for (i = 0; i < rows; i++) {
+ 
+    temp = matrix[i][i];
+    for (j = 0; j < 2 * rows; j++) {
+
+        matrix[i][j] = matrix[i][j] / temp;
+    }
+}
+
  };
  
  
