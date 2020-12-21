@@ -14,3 +14,8 @@ Matrix.prototype.getSum = function() {
  return sum;  
 };
 
+Matrix.prototype.getInverse = function() {
+
+ };
+ 
+ 
