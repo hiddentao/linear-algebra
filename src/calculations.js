@@ -21,6 +21,14 @@ Matrix.prototype.getInverse = function() {
     if(cols != rows){
       _throwError('matrix should be squared');
     }
+
+    for (i = 0; i < rows; i++) {
+ 
+      for (j = 0; j < 2*rows; j++) {
+          if (j == (i + rows))
+              matrix[i][j] = 1;
+      }
+  }
  };
  
  
